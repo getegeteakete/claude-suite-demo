@@ -59,6 +59,14 @@
         .spec-label { background: #f8f9fa; padding: 20px; font-weight: 600; color: #2c3e50; border-right: 1px solid #e1e8ed; }
         .spec-value { padding: 20px; color: #2c3e50; }
         
+        /* 価格テーブル */
+        .price-table { background: white; border-radius: 3px; overflow: hidden; border: 1px solid #e1e8ed; margin-top: 30px; }
+        .price-table table { width: 100%; border-collapse: collapse; }
+        .price-table th { background: #2c3e50; color: white; padding: 16px; text-align: left; font-size: 14px; font-weight: 600; }
+        .price-table td { padding: 16px; border-bottom: 1px solid #f1f3f5; font-size: 14px; }
+        .price-table tr:last-child td { border-bottom: none; background: #eaf2f8; font-weight: 600; font-size: 16px; color: #2c3e50; }
+        .price-highlight { color: #3498db; font-weight: 700; font-size: 18px; }
+        
         /* 料金プラン */
         .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
         .pricing-card { background: white; border-radius: 3px; padding: 40px 30px; border: 2px solid #e1e8ed; transition: all 0.3s; }
@@ -140,33 +148,33 @@
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">👥</div>
-                    <h3 class="feature-title">顧客管理</h3>
-                    <p class="feature-desc">1,000件以上の顧客データを一元管理。ステータス別・業種別の検索、売上実績の即座確認、顧客履歴の自動記録で、営業活動を支援します。</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💼</div>
-                    <h3 class="feature-title">商談・案件管理</h3>
-                    <p class="feature-desc">商談ステージ別の進捗管理、成約確度の可視化、フォローアップ予定の自動リマインド。商談から成約までのプロセスを見える化します。</p>
+                    <h3 class="feature-title">顧客・案件・契約の一元管理</h3>
+                    <p class="feature-desc">1,000件以上の顧客データ、進行中の案件、有効契約を一元管理。ステータス別・業種別の検索、売上実績の即座確認、顧客履歴の自動記録で、営業活動を支援します。</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🤖</div>
-                    <h3 class="feature-title">AI自動応答</h3>
-                    <p class="feature-desc">Claude AIが問い合わせに自動応答。月間800件以上の問い合わせに対応、平均応答時間2.3秒、24時間365日稼働で顧客満足度を向上。</p>
+                    <h3 class="feature-title">AI応答・自動メール送信</h3>
+                    <p class="feature-desc">Claude AIが問い合わせに自動応答。月間800件以上の問い合わせに対応、平均応答時間2.3秒、24時間365日稼働。自動メール送信で顧客フォローも効率化します。</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📄</div>
-                    <h3 class="feature-title">請求書管理</h3>
-                    <p class="feature-desc">インボイス制度対応の適格請求書を自動生成。売掛残高管理、入金状況追跡、支払遅延アラートで確実な資金回収を実現します。</p>
+                    <div class="feature-icon">📅</div>
+                    <h3 class="feature-title">商談予約・スケジュール管理</h3>
+                    <p class="feature-desc">商談予約の自動管理、スケジュールの可視化、フォローアップ予定の自動リマインド。チーム全体のスケジュールを一元管理します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3 class="feature-title">データ分析・レポート自動生成</h3>
+                    <p class="feature-desc">AIが売上データを自動分析し、月次レポートを自動生成。売上トレンド、改善提案、次のアクションを具体的に提示します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">セキュリティ監視・アクセス制御</h3>
+                    <p class="feature-desc">SSL/TLS暗号化、ユーザー別権限設定、IPアドレス制限、二段階認証。24時間体制でセキュリティを監視し、企業データを保護します。</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">💚</div>
                     <h3 class="feature-title">会計ソフト連携</h3>
                     <p class="feature-desc">freee・マネーフォワード・弥生会計など主要会計ソフトとCSV連携。請求データを自動同期し、経理業務を大幅削減します。</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <h3 class="feature-title">AI分析レポート</h3>
-                    <p class="feature-desc">AIが売上データを自動分析し、インサイトを生成。売上トレンド、改善提案、次のアクションを具体的に提示します。</p>
                 </div>
             </div>
         </div>
@@ -176,28 +184,32 @@
     <section class="section section-gray">
         <div class="section-content">
             <h2 class="section-title">IT導入補助金2025 対応業務プロセス</h2>
-            <p class="section-subtitle">4つの業務プロセスに対応し、補助金申請要件を満たしています</p>
+            <p class="section-subtitle">4つの業務プロセスに対応し、上位補助枠の要件をクリア</p>
             <div class="process-grid">
                 <div class="process-card">
-                    <div class="process-number">共P-01</div>
-                    <div class="process-name">顧客対応・販売支援</div>
-                    <div class="process-detail">顧客管理 / 商談管理 / AI自動応答 / 予約管理</div>
+                    <div class="process-number">プロセス 1</div>
+                    <div class="process-name">顧客対応・営業支援</div>
+                    <div class="process-detail">顧客管理 / 商談管理 / AI自動応答 / 予約管理 / スケジュール管理</div>
                 </div>
                 <div class="process-card">
-                    <div class="process-number">共P-02</div>
-                    <div class="process-name">顧客・案件管理</div>
-                    <div class="process-detail">案件進捗管理 / 商談ステージ管理 / フォローアップ</div>
+                    <div class="process-number">プロセス 2</div>
+                    <div class="process-name">販売・契約管理</div>
+                    <div class="process-detail">案件進捗管理 / 商談ステージ管理 / 契約管理 / 請求書発行</div>
                 </div>
                 <div class="process-card">
-                    <div class="process-number">共P-04</div>
-                    <div class="process-name">会計・財務・資産</div>
-                    <div class="process-detail">請求書発行 / 入金管理 / 会計ソフト連携</div>
+                    <div class="process-number">プロセス 3</div>
+                    <div class="process-name">業務プロセス管理</div>
+                    <div class="process-detail">タスク管理 / 活動記録 / データ分析 / レポート自動生成</div>
                 </div>
                 <div class="process-card">
-                    <div class="process-number">共P-05</div>
-                    <div class="process-name">総務・人事・労務</div>
-                    <div class="process-detail">スケジュール管理 / タスク管理 / 活動記録</div>
+                    <div class="process-number">プロセス 4</div>
+                    <div class="process-name">決済・アフターフォロー</div>
+                    <div class="process-detail">入金管理 / 会計ソフト連携 / 顧客フォローアップ / 自動メール送信</div>
                 </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px; padding: 24px; background: white; border-radius: 3px; border: 2px solid #3498db;">
+                <p style="font-size: 18px; color: #2c3e50; font-weight: 600; margin-bottom: 10px;">✓ 合計「4プロセス」以上を満たすため、上位補助枠の要件クリア</p>
+                <p style="font-size: 14px; color: #7f8c8d;">IT導入補助金2025の最大補助率・補助額の対象となります</p>
             </div>
         </div>
     </section>
@@ -213,8 +225,12 @@
                     <div class="spec-value">クラウド型SaaS（Software as a Service）</div>
                 </div>
                 <div class="spec-row">
-                    <div class="spec-label">AI技術</div>
-                    <div class="spec-value">Claude API (Anthropic社) - 最新の大規模言語モデル</div>
+                    <div class="spec-label">技術構成</div>
+                    <div class="spec-value">Next.js + Supabase + Claude API + Vercelホスティング</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">対象業種</div>
+                    <div class="spec-value">中小企業、コンサルティング業、販売代理業、サービス業</div>
                 </div>
                 <div class="spec-row">
                     <div class="spec-label">対応デバイス</div>
@@ -253,6 +269,10 @@
                     <div class="spec-value">適格請求書発行事業者登録番号対応 / 税率別集計 / 消費税額自動計算</div>
                 </div>
                 <div class="spec-row">
+                    <div class="spec-label">導入方式</div>
+                    <div class="spec-value">リモート導入（オンライン完結・訪問不要）</div>
+                </div>
+                <div class="spec-row">
                     <div class="spec-label">稼働率</div>
                     <div class="spec-value">99.9% SLA保証（年間停止時間8.76時間以内）</div>
                 </div>
@@ -260,67 +280,136 @@
         </div>
     </section>
     
-    <!-- 料金プラン -->
-    <section class="section section-gray" id="pricing">
+    <!-- 導入サポート -->
+    <section class="section section-gray">
         <div class="section-content">
-            <h2 class="section-title">料金プラン</h2>
-            <p class="section-subtitle">IT導入補助金を活用すれば、最大2/3が補助対象</p>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <div class="plan-name">スタンダード</div>
-                    <div class="plan-price">¥80,000</div>
-                    <div class="plan-price-unit">/ 月額（税別）</div>
-                    <ul class="plan-features">
-                        <li>ユーザー数: 10名まで</li>
-                        <li>顧客データ: 500件まで</li>
-                        <li>AI自動応答: 月500件まで</li>
-                        <li>請求書発行: 無制限</li>
-                        <li>会計ソフト連携</li>
-                        <li>メールサポート</li>
-                        <li>導入支援（オンライン）</li>
-                    </ul>
-                    <a href="#contact" class="plan-cta">お問い合わせ</a>
+            <h2 class="section-title">オンライン完結型導入支援</h2>
+            <p class="section-subtitle">すべてオンラインで完結。訪問不要で安心導入</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💻</div>
+                    <h3 class="feature-title">Zoom導入研修</h3>
+                    <p class="feature-desc">専任担当者がZoomで丁寧に操作方法を指導。画面共有でわかりやすく、質問にもその場で回答します。</p>
                 </div>
-                
-                <div class="pricing-card featured">
-                    <div class="plan-name">エンタープライズ ⭐人気</div>
-                    <div class="plan-price">¥150,000</div>
-                    <div class="plan-price-unit">/ 月額（税別）</div>
-                    <ul class="plan-features">
-                        <li>ユーザー数: 無制限</li>
-                        <li>顧客データ: 無制限</li>
-                        <li>AI自動応答: 無制限</li>
-                        <li>請求書発行: 無制限</li>
-                        <li>会計ソフト連携</li>
-                        <li>メール・電話サポート</li>
-                        <li>専任担当者</li>
-                        <li>カスタマイズ対応</li>
-                        <li>API連携無制限</li>
-                    </ul>
-                    <a href="#contact" class="plan-cta">お問い合わせ</a>
+                <div class="feature-card">
+                    <div class="feature-icon">📖</div>
+                    <h3 class="feature-title">操作マニュアル・動画提供</h3>
+                    <p class="feature-desc">PDF形式の詳細マニュアルと動画チュートリアルを提供。いつでも確認できるので安心です。</p>
                 </div>
-                
-                <div class="pricing-card">
-                    <div class="plan-name">プレミアム</div>
-                    <div class="plan-price">¥120,000</div>
-                    <div class="plan-price-unit">/ 月額（税別）</div>
-                    <ul class="plan-features">
-                        <li>ユーザー数: 30名まで</li>
-                        <li>顧客データ: 2,000件まで</li>
-                        <li>AI自動応答: 月2,000件まで</li>
-                        <li>請求書発行: 無制限</li>
-                        <li>会計ソフト連携</li>
-                        <li>メール・電話サポート</li>
-                        <li>導入支援（オンライン）</li>
-                        <li>レポート自動生成</li>
-                    </ul>
-                    <a href="#contact" class="plan-cta">お問い合わせ</a>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title">メール・チャットサポート</h3>
+                    <p class="feature-desc">導入後も平日のメール・チャットサポートで継続的に支援。困ったときも安心です。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">クラウド自動更新</h3>
+                    <p class="feature-desc">クラウドシステムなので、アップデートは自動実行。常に最新機能をご利用いただけます。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">セキュリティ監視</h3>
+                    <p class="feature-desc">24時間体制でセキュリティを監視。不正アクセスや異常を即座に検知・対応します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3 class="feature-title">月次点検・年2回更新</h3>
+                    <p class="feature-desc">月次でシステム状況を点検。年2回の大型アップデートで機能を強化し、長期運用を支援します。</p>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 40px; padding: 20px; background: white; border-radius: 3px;">
-                <p style="font-size: 16px; color: #2c3e50; margin-bottom: 10px;"><strong>初期導入費用: ¥715,000（税別）</strong></p>
-                <p style="font-size: 14px; color: #7f8c8d;">システム設定・データ移行支援・操作研修を含む</p>
-                <p style="font-size: 14px; color: #3498db; margin-top: 15px;"><strong>★ IT導入補助金活用で実質負担額を大幅削減可能</strong></p>
+        </div>
+    </section>
+    
+    <!-- 料金プラン -->
+    <section class="section section-white" id="pricing">
+        <div class="section-content">
+            <h2 class="section-title">料金プラン（2年契約・税込）</h2>
+            <p class="section-subtitle">IT導入補助金を活用すれば、最大2/3が補助対象</p>
+            
+            <div class="price-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>区分</th>
+                            <th>内容</th>
+                            <th style="text-align: right;">金額（税込）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>初期導入設定</strong></td>
+                            <td>クラウド環境構築・ユーザー設定・データ移行</td>
+                            <td style="text-align: right;">¥150,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>セキュリティ設定</strong></td>
+                            <td>アクセス制御・SSL・バックアップ設計</td>
+                            <td style="text-align: right;">¥150,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>マニュアル・動画教材作成</strong></td>
+                            <td>操作マニュアルPDF・動画チュートリアル</td>
+                            <td style="text-align: right;">¥200,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>オンライン導入支援</strong></td>
+                            <td>Zoom研修・メールQA対応</td>
+                            <td style="text-align: right;">¥100,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>クラウド利用料（24ヶ月）</strong></td>
+                            <td>AI顧客管理・契約・レポート機能（月額¥150,000×24ヶ月）</td>
+                            <td style="text-align: right;">¥3,600,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>保守・アップデート（24ヶ月）</strong></td>
+                            <td>月次点検・年2回更新（月額¥25,000×24ヶ月）</td>
+                            <td style="text-align: right;">¥600,000</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>合計（2年契約）</strong></td>
+                            <td style="text-align: right;"><span class="price-highlight">¥4,800,000</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #eaf2f8 0%, #d5e8f7 100%); border-radius: 3px; border: 2px solid #3498db;">
+                <p style="font-size: 20px; color: #2c3e50; font-weight: 700; margin-bottom: 15px;">💰 IT導入補助金2025を活用すれば</p>
+                <p style="font-size: 32px; color: #3498db; font-weight: 700; margin-bottom: 10px;">最大 ¥3,200,000 の補助</p>
+                <p style="font-size: 16px; color: #7f8c8d; margin-bottom: 20px;">（補助率2/3の場合）</p>
+                <p style="font-size: 18px; color: #2c3e50; font-weight: 600;">実質負担額：約 ¥1,600,000 〜</p>
+                <p style="font-size: 14px; color: #7f8c8d; margin-top: 15px;">※補助金の詳細は申請要件により異なります</p>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 24px; background: white; border-radius: 3px; border: 1px solid #e1e8ed;">
+                <h3 style="font-size: 18px; font-weight: 600; color: #2c3e50; margin-bottom: 15px;">💡 2年契約に含まれるサービス</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div style="font-size: 14px; color: #2c3e50; padding-left: 20px; position: relative;">
+                        <span style="position: absolute; left: 0; color: #27ae60; font-weight: 600;">✓</span>
+                        24時間365日利用可能なクラウドシステム
+                    </div>
+                    <div style="font-size: 14px; color: #2c3e50; padding-left: 20px; position: relative;">
+                        <span style="position: absolute; left: 0; color: #27ae60; font-weight: 600;">✓</span>
+                        Claude AI自動応答（無制限）
+                    </div>
+                    <div style="font-size: 14px; color: #2c3e50; padding-left: 20px; position: relative;">
+                        <span style="position: absolute; left: 0; color: #27ae60; font-weight: 600;">✓</span>
+                        月次システム点検・監視
+                    </div>
+                    <div style="font-size: 14px; color: #2c3e50; padding-left: 20px; position: relative;">
+                        <span style="position: absolute; left: 0; color: #27ae60; font-weight: 600;">✓</span>
+                        年2回の機能アップデート
+                    </div>
+                    <div style="font-size: 14px; color: #2c3e50; padding-left: 20px; position: relative;">
+                        <span style="position: absolute; left: 0; color: #27ae60; font-weight: 600;">✓</span>
+                        データバックアップ（毎日自動実行）
+                    </div>
+                    <div style="font-size: 14px; color: #2c3e50; padding-left: 20px; position: relative;">
+                        <span style="position: absolute; left: 0; color: #27ae60; font-weight: 600;">✓</span>
+                        メール・チャットサポート（平日）
+                    </div>
+                </div>
             </div>
         </div>
     </section>
