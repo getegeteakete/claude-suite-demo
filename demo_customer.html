@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAUDE SUITE - 顧客管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, sans-serif;
+            background: #f8f9fa;
+            color: #1a1a1a;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .logo {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .logo-title {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .logo-company {
+            font-size: 11px;
+            color: #bdc3c7;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 3px;
+            background: #34495e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 13px;
+        }
+        
+        .container {
+            display: flex;
+            min-height: calc(100vh - 65px);
+        }
+        
+        .sidebar {
+            width: 240px;
+            background: #2c3e50;
+            padding: 24px 0;
+            border-right: 1px solid #34495e;
+        }
+        
+        .menu-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: #bdc3c7;
+            border-left: 3px solid transparent;
+        }
+        
+        .menu-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: #ecf0f1;
+        }
+        
+        .menu-item.active {
+            background: rgba(255,255,255,0.08);
+            color: #ffffff;
+            border-left-color: #3498db;
+        }
+        
+        .menu-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 32px;
+            background: #f8f9fa;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .search-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 3px;
+            border: 1px solid #e1e8ed;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+        
+        .customer-table {
+            background: white;
+            border-radius: 3px;
+            border: 1px solid #e1e8ed;
+            overflow: hidden;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f8f9fa;
+        }
+        
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #7f8c8d;
+            border-bottom: 1px solid #e1e8ed;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #f1f3f5;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: #d5f4e6;
+            color: #1e7e34;
+        }
+        
+        .status-prospect {
+            background: #d3e5f5;
+            color: #0c4a6e;
+        }
+        
+        .status-inactive {
+            background: #fee;
+            color: #991b1b;
+        }
+        
+        .action-btn {
+            background: #f1f3f5;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-right: 5px;
+            transition: background 0.2s;
+            color: #2c3e50;
+        }
+        
+        .action-btn:hover {
+            background: #e1e8ed;
+        }
+        
+        .ai-badge {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+            letter-spacing: 0.3px;
+        }
+        
+        .customer-tag {
+            display: inline-block;
+            background: #f1f3f5;
+            color: #7f8c8d;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📊</span>
+                    <span>ダッシュボード</span>
+                </div>
+            </a>
+            <div class="menu-item active">
+                <span class="menu-icon">👥</span>
+                <span>顧客管理</span>
+            </div>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">💼</span>
+                    <span>商談・案件管理</span>
+                </div>
+            </a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📅</span>
+                    <span>予約・スケジュール</span>
+                </div>
+            </a>
+            <a href="demo_contracts.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📄</span>
+                    <span>契約・請求管理</span>
+                </div>
+            </a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📈</span>
+                    <span>分析レポート</span>
+                </div>
+            </a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">🤖</span>
+                    <span>AI自動応答<span class="ai-badge">AI</span></span>
+                </div>
+            </a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">⚙️</span>
+                    <span>設定</span>
+                </div>
+            </a>
+        </div>
+        
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">顧客管理</h1>
+                <button class="btn-primary">+ 新規顧客登録</button>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="🔍 顧客名、担当者名、企業名で検索...">
+                <select class="filter-select">
+                    <option>すべてのステータス</option>
+                    <option>アクティブ</option>
+                    <option>見込み顧客</option>
+                    <option>休眠</option>
+                </select>
+                <select class="filter-select">
+                    <option>すべての業種</option>
+                    <option>IT・通信</option>
+                    <option>製造業</option>
+                    <option>小売業</option>
+                    <option>サービス業</option>
+                </select>
+            </div>
+            
+            <div class="customer-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>顧客ID</th>
+                            <th>企業名</th>
+                            <th>担当者</th>
+                            <th>ステータス</th>
+                            <th>業種</th>
+                            <th>最終接触日</th>
+                            <th>売上（累計）</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#C-1001</td>
+                            <td><strong>株式会社ABC商事</strong></td>
+                            <td>
+                                田中太郎<br>
+                                <small style="color: #95a5a6;">tanaka@abc.co.jp</small>
+                            </td>
+                            <td><span class="status-badge status-active">アクティブ</span></td>
+                            <td>
+                                <span class="customer-tag">製造業</span>
+                            </td>
+                            <td>2025/10/28</td>
+                            <td><strong>¥2,450,000</strong></td>
+                            <td>
+                                <button class="action-btn">詳細</button>
+                                <button class="action-btn">編集</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#C-1002</td>
+                            <td><strong>XYZ株式会社</strong></td>
+                            <td>
+                                佐藤花子<br>
+                                <small style="color: #95a5a6;">sato@xyz.co.jp</small>
+                            </td>
+                            <td><span class="status-badge status-active">アクティブ</span></td>
+                            <td>
+                                <span class="customer-tag">IT・通信</span>
+                            </td>
+                            <td>2025/10/30</td>
+                            <td><strong>¥1,890,000</strong></td>
+                            <td>
+                                <button class="action-btn">詳細</button>
+                                <button class="action-btn">編集</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#C-1003</td>
+                            <td><strong>DEF コーポレーション</strong></td>
+                            <td>
+                                鈴木一郎<br>
+                                <small style="color: #95a5a6;">suzuki@def.com</small>
+                            </td>
+                            <td><span class="status-badge status-prospect">見込み顧客</span></td>
+                            <td>
+                                <span class="customer-tag">小売業</span>
+                            </td>
+                            <td>2025/10/25</td>
+                            <td><strong>¥0</strong></td>
+                            <td>
+                                <button class="action-btn">詳細</button>
+                                <button class="action-btn">編集</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#C-1004</td>
+                            <td><strong>株式会社GHI製作所</strong></td>
+                            <td>
+                                高橋美咲<br>
+                                <small style="color: #95a5a6;">takahashi@ghi.jp</small>
+                            </td>
+                            <td><span class="status-badge status-active">アクティブ</span></td>
+                            <td>
+                                <span class="customer-tag">製造業</span>
+                            </td>
+                            <td>2025/10/31</td>
+                            <td><strong>¥3,200,000</strong></td>
+                            <td>
+                                <button class="action-btn">詳細</button>
+                                <button class="action-btn">編集</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#C-1005</td>
+                            <td><strong>JKL ソリューションズ</strong></td>
+                            <td>
+                                伊藤健太<br>
+                                <small style="color: #95a5a6;">ito@jkl.net</small>
+                            </td>
+                            <td><span class="status-badge status-prospect">見込み顧客</span></td>
+                            <td>
+                                <span class="customer-tag">サービス業</span>
+                            </td>
+                            <td>2025/10/20</td>
+                            <td><strong>¥0</strong></td>
+                            <td>
+                                <button class="action-btn">詳細</button>
+                                <button class="action-btn">編集</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#C-1006</td>
+                            <td><strong>MNO トレーディング</strong></td>
+                            <td>
+                                山本直樹<br>
+                                <small style="color: #95a5a6;">yamamoto@mno.com</small>
+                            </td>
+                            <td><span class="status-badge status-inactive">休眠</span></td>
+                            <td>
+                                <span class="customer-tag">卸売業</span>
+                            </td>
+                            <td>2025/08/15</td>
+                            <td><strong>¥850,000</strong></td>
+                            <td>
+                                <button class="action-btn">詳細</button>
+                                <button class="action-btn">編集</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#C-1007</td>
+                            <td><strong>株式会社PQR企画</strong></td>
+                            <td>
+                                中村愛<br>
+                                <small style="color: #95a5a6;">nakamura@pqr.co.jp</small>
+                            </td>
+                            <td><span class="status-badge status-active">アクティブ</span></td>
+                            <td>
+                                <span class="customer-tag">広告業</span>
+                            </td>
+                            <td>2025/10/29</td>
+                            <td><strong>¥1,650,000</strong></td>
+                            <td>
+                                <button class="action-btn">詳細</button>
+                                <button class="action-btn">編集</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#C-1008</td>
+                            <td><strong>STU インダストリーズ</strong></td>
+                            <td>
+                                小林誠<br>
+                                <small style="color: #95a5a6;">kobayashi@stu.jp</small>
+                            </td>
+                            <td><span class="status-badge status-active">アクティブ</span></td>
+                            <td>
+                                <span class="customer-tag">製造業</span>
+                            </td>
+                            <td>2025/10/27</td>
+                            <td><strong>¥4,120,000</strong></td>
+                            <td>
+                                <button class="action-btn">詳細</button>
+                                <button class="action-btn">編集</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: center; color: #95a5a6; font-size: 13px;">
+                表示中: 1-8件 / 全1,248件
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAUDE SUITE - 画面一覧</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #2c3e50; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px; }
+        .container { max-width: 1200px; width: 100%; }
+        .header { text-align: center; color: white; margin-bottom: 50px; }
+        .title { font-size: 36px; font-weight: 600; margin-bottom: 8px; letter-spacing: 1px; }
+        .company { font-size: 16px; opacity: 0.8; margin-bottom: 16px; }
+        .subtitle { font-size: 16px; opacity: 0.7; }
+        .demo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 40px; max-width: 1400px; margin-left: auto; margin-right: auto; }
+        .demo-card { background: white; border-radius: 3px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.3s; cursor: pointer; text-decoration: none; color: inherit; display: block; }
+        .demo-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+        .demo-title { font-size: 22px; font-weight: 600; color: #2c3e50; margin-bottom: 10px; }
+        .demo-desc { font-size: 13px; color: #7f8c8d; line-height: 1.6; margin-bottom: 16px; }
+        .demo-process { font-size: 11px; color: #3498db; font-weight: 600; background: #eaf2f8; padding: 6px 12px; border-radius: 3px; display: inline-block; }
+        .info-box { background: white; border-radius: 3px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .info-title { font-size: 18px; font-weight: 600; color: #2c3e50; margin-bottom: 16px; }
+        .info-list { list-style: none; font-size: 13px; color: #7f8c8d; line-height: 2; }
+        .info-list li::before { content: "✓ "; color: #27ae60; font-weight: bold; margin-right: 8px; }
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; }
+        .footer { text-align: center; color: white; margin-top: 32px; font-size: 13px; opacity: 0.7; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">CLAUDE SUITE</h1>
+            <p class="company">合同会社UMA</p>
+            <p class="subtitle">クラウド型顧客管理AIシステム</p>
+            <div style="margin-top: 20px;">
+                <a href="login.html" style="background: white; color: #2c3e50; padding: 10px 24px; border-radius: 3px; text-decoration: none; font-size: 14px; font-weight: 500; display: inline-block;">ログイン画面を表示</a>
+            </div>
+        </div>
+        <div class="demo-grid">
+            <a href="demo_dashboard.html" class="demo-card">
+                <h2 class="demo-title">ダッシュボード</h2>
+                <p class="demo-desc">システム全体の状況を一目で把握。主要KPI、売上推移グラフ、最近の活動履歴を表示します。</p>
+                <span class="demo-process">共P-01, 02, 04対応</span>
+            </a>
+            <a href="demo_customer.html" class="demo-card">
+                <h2 class="demo-title">顧客管理</h2>
+                <p class="demo-desc">1,248件の顧客データを一元管理。ステータス別・業種別の検索、売上実績の即座確認が可能です。</p>
+                <span class="demo-process">共P-01（顧客対応・販売支援）</span>
+            </a>
+            <a href="demo_deals.html" class="demo-card">
+                <h2 class="demo-title">商談・案件管理</h2>
+                <p class="demo-desc">47件の進行中商談を管理。商談ステージ別の進捗管理、成約確度の可視化、フォローアップ予定を一元管理します。</p>
+                <span class="demo-process">共P-01（販売支援）</span>
+            </a>
+            <a href="demo_schedule.html" class="demo-card">
+                <h2 class="demo-title">予約・スケジュール</h2>
+                <p class="demo-desc">商談予定、顧客訪問、デモンストレーションなどのスケジュールをカレンダー形式で管理できます。</p>
+                <span class="demo-process">共P-01（顧客対応）</span>
+            </a>
+            <a href="demo_contracts.html" class="demo-card">
+                <h2 class="demo-title">契約・請求管理</h2>
+                <p class="demo-desc">124件の有効契約を管理。請求書発行、入金管理、契約更新アラートで売上を確実に回収します。</p>
+                <span class="demo-process">共P-04（会計・財務）</span>
+            </a>
+            <a href="demo_invoices.html" class="demo-card">
+                <h2 class="demo-title">請求書管理<span class="ai-badge">適格請求書対応</span></h2>
+                <p class="demo-desc">インボイス制度対応の請求書管理。売掛残高、入金状況、支払遅延を一元管理し、確実な資金回収を支援します。</p>
+                <span class="demo-process">共P-04（会計・財務）</span>
+            </a>
+            <a href="demo_export.html" class="demo-card">
+                <h2 class="demo-title">会計ソフト連携</h2>
+                <p class="demo-desc">freee・マネーフォワード・弥生会計など主要会計ソフトとCSV連携。請求データを自動同期できます。</p>
+                <span class="demo-process">共P-04（会計・財務）</span>
+            </a>
+            <a href="demo_ai_response.html" class="demo-card">
+                <h2 class="demo-title">AI自動応答<span class="ai-badge">Claude AI搭載</span></h2>
+                <p class="demo-desc">月間842件の問い合わせに自動対応。AI自動対応率78%、平均応答時間2.3秒を実現しています。</p>
+                <span class="demo-process">共P-01（顧客対応・販売支援）</span>
+            </a>
+            <a href="demo_report.html" class="demo-card">
+                <h2 class="demo-title">分析レポート<span class="ai-badge">自動生成</span></h2>
+                <p class="demo-desc">AIによる自動分析とインサイト生成。売上分析、顧客ランキング、具体的なアクション提案を提供します。</p>
+                <span class="demo-process">共P-02, 04, 05対応</span>
+            </a>
+            <a href="demo_settings.html" class="demo-card">
+                <h2 class="demo-title">設定</h2>
+                <p class="demo-desc">システム設定、ユーザー管理、通知設定、AI機能の詳細設定などをカスタマイズできます。</p>
+                <span class="demo-process">システム管理</span>
+            </a>
+        </div>
+        <div class="info-box">
+            <h3 class="info-title">IT導入補助金2025 対応状況</h3>
+            <ul class="info-list">
+                <li>4プロセス以上の業務対応（共P-01, 02, 04, 05）</li>
+                <li>AI機能の実装（Claude API活用）</li>
+                <li>クラウド型提供（SaaS）</li>
+                <li>セキュリティ対策（SSL通信・アクセス制御・自動バックアップ）</li>
+                <li>オンライン完結型の導入・保守サポート</li>
+                <li>外部システム連携（API対応）</li>
+            </ul>
+        </div>
+        <div class="footer">
+            <p>各画面を新しいタブで開いてご確認ください</p>
+            <p style="margin-top: 8px; font-size: 12px;">スクリーンショット取得推奨解像度: 1920x1080以上</p>
+        </div>
+    </div>
+</body>
+</html>

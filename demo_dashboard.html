@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAUDE SUITE - ダッシュボード</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, sans-serif;
+            background: #f8f9fa;
+            color: #1a1a1a;
+        }
+        
+        /* ヘッダー */
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .logo {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .logo-title {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .logo-company {
+            font-size: 11px;
+            color: #bdc3c7;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 3px;
+            background: #34495e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 13px;
+        }
+        
+        /* サイドバー */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 65px);
+        }
+        
+        .sidebar {
+            width: 240px;
+            background: #2c3e50;
+            padding: 24px 0;
+            border-right: 1px solid #34495e;
+        }
+        
+        .menu-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: #bdc3c7;
+            border-left: 3px solid transparent;
+        }
+        
+        .menu-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: #ecf0f1;
+        }
+        
+        .menu-item.active {
+            background: rgba(255,255,255,0.08);
+            color: #ffffff;
+            border-left-color: #3498db;
+        }
+        
+        .menu-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            flex: 1;
+            padding: 32px;
+            background: #f8f9fa;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        .page-subtitle {
+            color: #7f8c8d;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+        
+        /* 統計カード */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 3px;
+            border: 1px solid #e1e8ed;
+            transition: box-shadow 0.2s;
+        }
+        
+        .stat-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .stat-change {
+            font-size: 12px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .stat-change.positive {
+            color: #27ae60;
+        }
+        
+        /* グラフセクション */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .chart-card {
+            background: white;
+            padding: 24px;
+            border-radius: 3px;
+            border: 1px solid #e1e8ed;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .chart-placeholder {
+            height: 250px;
+            background: #f8f9fa;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 100%;
+            padding: 20px;
+        }
+        
+        .bar {
+            width: 40px;
+            background: #3498db;
+            border-radius: 3px 3px 0 0;
+            position: relative;
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #7f8c8d;
+            white-space: nowrap;
+        }
+        
+        /* 最近の活動 */
+        .activity-list {
+            background: white;
+            padding: 24px;
+            border-radius: 3px;
+            border: 1px solid #e1e8ed;
+        }
+        
+        .activity-item {
+            padding: 16px;
+            border-bottom: 1px solid #f1f3f5;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            background: #ecf0f1;
+            color: #7f8c8d;
+        }
+        
+        .activity-icon.blue {
+            background: #eaf2f8;
+            color: #3498db;
+        }
+        
+        .activity-icon.green {
+            background: #e8f5e9;
+            color: #27ae60;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-size: 13px;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .activity-time {
+            font-size: 11px;
+            color: #95a5a6;
+        }
+        
+        /* AIバッジ */
+        .ai-badge {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+            letter-spacing: 0.3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <div class="menu-item active">
+                <span class="menu-icon">📊</span>
+                <span>ダッシュボード</span>
+            </div>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">👥</span>
+                    <span>顧客管理</span>
+                </div>
+            </a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">💼</span>
+                    <span>商談・案件管理</span>
+                </div>
+            </a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📅</span>
+                    <span>予約・スケジュール</span>
+                </div>
+            </a>
+            <a href="demo_contracts.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📄</span>
+                    <span>契約・請求管理</span>
+                </div>
+            </a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📈</span>
+                    <span>分析レポート</span>
+                </div>
+            </a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">🤖</span>
+                    <span>AI自動応答<span class="ai-badge">AI</span></span>
+                </div>
+            </a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">⚙️</span>
+                    <span>設定</span>
+                </div>
+            </a>
+        </div>
+        
+        <div class="main-content">
+            <h1 class="page-title">ダッシュボード</h1>
+            <p class="page-subtitle">2025年11月1日（土）</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">総顧客数</div>
+                    <div class="stat-value">1,248</div>
+                    <div class="stat-change positive">
+                        ↑ 先月比 +12%
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">進行中の商談</div>
+                    <div class="stat-value">47</div>
+                    <div class="stat-change positive">
+                        ↑ 先週比 +5件
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">今月の売上</div>
+                    <div class="stat-value">¥8.5M</div>
+                    <div class="stat-change positive">
+                        ↑ 目標達成率 85%
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">AI対応件数</div>
+                    <div class="stat-value">842</div>
+                    <div class="stat-change positive">
+                        ↑ 対応率 78%
+                    </div>
+                </div>
+            </div>
+            
+            <div class="charts-section">
+                <div class="chart-card">
+                    <h3 class="chart-title">月次売上推移</h3>
+                    <div class="chart-placeholder">
+                        <div class="bar-chart">
+                            <div class="bar" style="height: 60%;">
+                                <span class="bar-label">6月</span>
+                            </div>
+                            <div class="bar" style="height: 75%;">
+                                <span class="bar-label">7月</span>
+                            </div>
+                            <div class="bar" style="height: 70%;">
+                                <span class="bar-label">8月</span>
+                            </div>
+                            <div class="bar" style="height: 85%;">
+                                <span class="bar-label">9月</span>
+                            </div>
+                            <div class="bar" style="height: 90%;">
+                                <span class="bar-label">10月</span>
+                            </div>
+                            <div class="bar" style="height: 95%;">
+                                <span class="bar-label">11月</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3 class="chart-title">商談ステージ分布</h3>
+                    <div class="chart-placeholder">
+                        <div style="padding: 20px;">
+                            <div style="margin-bottom: 15px;">
+                                <div style="font-size: 11px; color: #7f8c8d; margin-bottom: 5px;">初回接触</div>
+                                <div style="background: #ecf0f1; border-radius: 3px; height: 20px; position: relative;">
+                                    <div style="background: #3498db; width: 35%; height: 100%; border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <div style="font-size: 11px; color: #7f8c8d; margin-bottom: 5px;">提案中</div>
+                                <div style="background: #ecf0f1; border-radius: 3px; height: 20px;">
+                                    <div style="background: #3498db; width: 45%; height: 100%; border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <div style="font-size: 11px; color: #7f8c8d; margin-bottom: 5px;">見積提出</div>
+                                <div style="background: #ecf0f1; border-radius: 3px; height: 20px;">
+                                    <div style="background: #3498db; width: 25%; height: 100%; border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="font-size: 11px; color: #7f8c8d; margin-bottom: 5px;">クロージング</div>
+                                <div style="background: #ecf0f1; border-radius: 3px; height: 20px;">
+                                    <div style="background: #27ae60; width: 15%; height: 100%; border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="activity-list">
+                <h3 class="chart-title">最近の活動</h3>
+                <div class="activity-item">
+                    <div class="activity-icon blue">📧</div>
+                    <div class="activity-content">
+                        <div class="activity-title">AI自動応答: 株式会社ABCからの問い合わせに自動返信</div>
+                        <div class="activity-time">5分前</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon green">✅</div>
+                    <div class="activity-content">
+                        <div class="activity-title">商談成約: XYZ株式会社との契約が完了しました</div>
+                        <div class="activity-time">30分前</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon blue">📅</div>
+                    <div class="activity-content">
+                        <div class="activity-title">予約登録: 田中様との面談が11月5日 14:00に設定されました</div>
+                        <div class="activity-time">1時間前</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">📊</div>
+                    <div class="activity-content">
+                        <div class="activity-title">レポート生成: 10月度売上レポートが自動生成されました</div>
+                        <div class="activity-time">2時間前</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon green">👤</div>
+                    <div class="activity-content">
+                        <div class="activity-title">新規顧客登録: 株式会社DEFが顧客データベースに追加されました</div>
+                        <div class="activity-time">3時間前</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
