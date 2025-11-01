@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規顧客登録 | CLAUDE SUITE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; max-width: 900px; }
+        
+        .breadcrumb { margin-bottom: 24px; font-size: 14px; color: #7f8c8d; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        
+        .page-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 32px; }
+        
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; }
+        
+        .form-card { background: white; padding: 32px; border-radius: 3px; border: 1px solid #e1e8ed; margin-bottom: 24px; }
+        .form-section-title { font-size: 18px; font-weight: 600; margin-bottom: 24px; color: #2c3e50; padding-bottom: 12px; border-bottom: 2px solid #e1e8ed; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 24px; }
+        .form-group { }
+        .form-label { display: block; font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; transition: all 0.2s; }
+        .form-input:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); }
+        .form-select { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .form-textarea { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; min-height: 100px; resize: vertical; font-family: inherit; }
+        .form-textarea:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); }
+        
+        .btn { padding: 12px 24px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-secondary { background: white; color: #2c3e50; border: 1px solid #ddd; }
+        .btn-secondary:hover { background: #f8f9fa; }
+        
+        .form-actions { display: flex; gap: 12px; justify-content: center; padding-top: 24px; border-top: 2px solid #e1e8ed; }
+        
+        .ai-helper { background: #e8f5e9; padding: 16px; border-radius: 3px; border-left: 4px solid #27ae60; margin-top: 16px; }
+        .ai-helper-title { font-size: 12px; font-weight: 600; color: #27ae60; margin-bottom: 6px; }
+        .ai-helper-text { font-size: 13px; color: #2c3e50; }
+        .required-note { font-size: 13px; color: #7f8c8d; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📊</span>
+                    <span>ダッシュボード</span>
+                </div>
+            </a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item active">
+                    <span class="menu-icon">👥</span>
+                    <span>顧客管理</span>
+                </div>
+            </a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">💼</span>
+                    <span>商談・案件管理</span>
+                </div>
+            </a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📅</span>
+                    <span>予約・スケジュール</span>
+                </div>
+            </a>
+            <a href="demo_contracts.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📄</span>
+                    <span>契約・請求管理</span>
+                </div>
+            </a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📈</span>
+                    <span>分析レポート</span>
+                </div>
+            </a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">🤖</span>
+                    <span>AI自動応答<span class="ai-badge">AI</span></span>
+                </div>
+            </a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">⚙️</span>
+                    <span>設定</span>
+                </div>
+            </a>
+        </div>
+        
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="demo_customer.html">顧客管理</a> / 新規顧客登録
+            </div>
+            
+            <h1 class="page-title">新規顧客登録<span class="ai-badge">AI支援</span></h1>
+            <p class="required-note"><span style="color: #e74c3c;">*</span> は必須項目です</p>
+            
+            <div class="form-card">
+                <h3 class="form-section-title">基本情報</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">企業名 <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" class="form-input" placeholder="株式会社〇〇" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">業種 <span style="color: #e74c3c;">*</span></label>
+                        <select class="form-select" required>
+                            <option value="">選択してください</option>
+                            <option>製造業</option>
+                            <option>IT・通信</option>
+                            <option>小売業</option>
+                            <option>サービス業</option>
+                            <option>建設業</option>
+                            <option>卸売業</option>
+                            <option>金融業</option>
+                            <option>その他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">ステータス</label>
+                        <select class="form-select">
+                            <option>見込み顧客</option>
+                            <option>アクティブ</option>
+                            <option>休眠</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">従業員数</label>
+                        <input type="text" class="form-input" placeholder="約50名">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">設立年</label>
+                        <input type="text" class="form-input" placeholder="2010年">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">郵便番号</label>
+                        <input type="text" class="form-input" placeholder="150-0001">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">電話番号 <span style="color: #e74c3c;">*</span></label>
+                        <input type="tel" class="form-input" placeholder="03-1234-5678" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">ウェブサイト</label>
+                        <input type="url" class="form-input" placeholder="https://">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">所在地</label>
+                    <input type="text" class="form-input" placeholder="東京都渋谷区渋谷1-1-1">
+                </div>
+            </div>
+            
+            <div class="form-card">
+                <h3 class="form-section-title">担当者情報<span class="ai-badge">AI自動補完</span></h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">氏名 <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" class="form-input" placeholder="山田 太郎" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">役職</label>
+                        <input type="text" class="form-input" placeholder="営業部長">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">メールアドレス <span style="color: #e74c3c;">*</span></label>
+                        <input type="email" class="form-input" placeholder="yamada@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">携帯電話</label>
+                        <input type="tel" class="form-input" placeholder="090-1234-5678">
+                    </div>
+                </div>
+                
+                <div class="ai-helper">
+                    <div class="ai-helper-title">💡 AI アシスト</div>
+                    <div class="ai-helper-text">
+                        メールアドレスを入力すると、AIが企業情報を自動検索し、
+                        企業名・所在地・電話番号などを自動補完します。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-card">
+                <h3 class="form-section-title">営業情報</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">担当営業 <span style="color: #e74c3c;">*</span></label>
+                        <select class="form-select" required>
+                            <option selected>SONODA MAYU</option>
+                            <option>山田太郎</option>
+                            <option>佐藤花子</option>
+                            <option>田中一郎</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">紹介元</label>
+                        <select class="form-select">
+                            <option>選択してください</option>
+                            <option>既存顧客からの紹介</option>
+                            <option>ウェブサイト</option>
+                            <option>SNS広告</option>
+                            <option>展示会</option>
+                            <option>テレアポ</option>
+                            <option>その他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">初回接触日</label>
+                        <input type="date" class="form-input" value="2025-11-01">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">優先度</label>
+                        <select class="form-select">
+                            <option>通常</option>
+                            <option>高</option>
+                            <option>最優先</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">メモ・特記事項</label>
+                    <textarea class="form-textarea" placeholder="顧客の要望、課題、その他重要な情報を記入してください"></textarea>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <a href="demo_customer.html" class="btn btn-secondary">キャンセル</a>
+                <button class="btn btn-primary">💾 保存して顧客一覧へ</button>
+                <button class="btn btn-primary" style="background: #27ae60;">💾 保存して商談を作成</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

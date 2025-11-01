@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商談詳細 - クラウド型CRM導入プロジェクト | CLAUDE SUITE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; max-width: 1400px; }
+        
+        .breadcrumb { margin-bottom: 24px; font-size: 14px; color: #7f8c8d; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        
+        .deal-header { background: white; padding: 32px; border-radius: 3px; border: 1px solid #e1e8ed; margin-bottom: 24px; }
+        .deal-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 16px; }
+        .deal-meta-row { display: flex; gap: 24px; align-items: center; margin-bottom: 24px; }
+        .stage-badge { display: inline-block; padding: 8px 16px; border-radius: 3px; font-size: 13px; font-weight: 600; background: #fce4ec; color: #c2185b; }
+        .deal-amount-large { font-size: 36px; font-weight: 700; color: #3498db; }
+        
+        .progress-section { margin-top: 24px; }
+        .progress-label { font-size: 13px; color: #7f8c8d; margin-bottom: 8px; display: flex; justify-content: space-between; }
+        .progress-bar-container { height: 24px; background: #f1f3f5; border-radius: 3px; overflow: hidden; position: relative; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #3498db 0%, #2ecc71 100%); transition: width 0.3s; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; }
+        .progress-percentage { color: white; font-weight: 600; font-size: 12px; }
+        
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; }
+        
+        .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+        .card { background: white; padding: 24px; border-radius: 3px; border: 1px solid #e1e8ed; margin-bottom: 24px; }
+        .card-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: #2c3e50; }
+        
+        .info-row { display: grid; grid-template-columns: 140px 1fr; padding: 12px 0; border-bottom: 1px solid #f1f3f5; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { font-size: 13px; color: #7f8c8d; font-weight: 500; }
+        .info-value { font-size: 14px; color: #2c3e50; font-weight: 500; }
+        
+        .timeline { position: relative; padding-left: 30px; }
+        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: #e1e8ed; }
+        .timeline-item { position: relative; margin-bottom: 24px; }
+        .timeline-item::before { content: ''; position: absolute; left: -26px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #3498db; border: 2px solid white; box-shadow: 0 0 0 2px #e1e8ed; }
+        .timeline-date { font-size: 11px; color: #95a5a6; margin-bottom: 4px; }
+        .timeline-content { font-size: 14px; color: #2c3e50; font-weight: 500; }
+        .timeline-detail { font-size: 12px; color: #7f8c8d; margin-top: 4px; line-height: 1.6; }
+        
+        .task-list { }
+        .task-item { padding: 12px; border: 1px solid #e1e8ed; border-radius: 3px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+        .task-checkbox { width: 20px; height: 20px; border: 2px solid #3498db; border-radius: 3px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .task-checkbox.checked { background: #3498db; }
+        .task-checkbox.checked::after { content: '✓'; color: white; font-size: 14px; font-weight: 700; }
+        .task-text { flex: 1; font-size: 14px; color: #2c3e50; }
+        .task-text.completed { text-decoration: line-through; color: #95a5a6; }
+        .task-date { font-size: 12px; color: #7f8c8d; }
+        
+        .ai-insight { background: #eaf2f8; border-left: 4px solid #3498db; padding: 16px; border-radius: 3px; margin-top: 16px; }
+        .ai-insight-title { font-size: 13px; font-weight: 600; color: #3498db; margin-bottom: 8px; }
+        .ai-insight-text { font-size: 13px; color: #2c3e50; line-height: 1.6; }
+        
+        .btn { padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-secondary { background: white; color: #2c3e50; border: 1px solid #ddd; }
+        .btn-secondary:hover { background: #f8f9fa; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-success:hover { background: #229954; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📊</span>
+                    <span>ダッシュボード</span>
+                </div>
+            </a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">👥</span>
+                    <span>顧客管理</span>
+                </div>
+            </a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item active">
+                    <span class="menu-icon">💼</span>
+                    <span>商談・案件管理</span>
+                </div>
+            </a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📅</span>
+                    <span>予約・スケジュール</span>
+                </div>
+            </a>
+            <a href="demo_contracts.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📄</span>
+                    <span>契約・請求管理</span>
+                </div>
+            </a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">📈</span>
+                    <span>分析レポート</span>
+                </div>
+            </a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">🤖</span>
+                    <span>AI自動応答<span class="ai-badge">AI</span></span>
+                </div>
+            </a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <span class="menu-icon">⚙️</span>
+                    <span>設定</span>
+                </div>
+            </a>
+        </div>
+        
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="demo_deals.html">商談・案件管理</a> / クラウド型CRM導入プロジェクト
+            </div>
+            
+            <div class="deal-header">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <div style="flex: 1;">
+                        <h1 class="deal-title">クラウド型CRM導入プロジェクト</h1>
+                        <div class="deal-meta-row">
+                            <span class="stage-badge">クロージング</span>
+                            <span style="font-size: 14px; color: #7f8c8d;">案件ID: #DEAL-001</span>
+                            <a href="customer_detail.html" style="font-size: 14px; color: #3498db; text-decoration: none;">📋 株式会社ABC商事</a>
+                        </div>
+                    </div>
+                    <div class="deal-amount-large">¥4,800,000</div>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span><strong>成約確度</strong></span>
+                        <span style="font-weight: 600; color: #27ae60;">85%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: 85%;">
+                            <span class="progress-percentage">85%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-insight">
+                    <div class="ai-insight-title">🤖 AIインサイト</div>
+                    <div class="ai-insight-text">
+                        この商談は高い成約確度を示しています。顧客の予算は500万円まで承認済みで、当社が最有力候補です。
+                        次のアクションとして、11/5の面談で最終見積もりを提示することで成約に近づけます。
+                        競合2社よりも早期に提案できている点が優位性です。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-grid">
+                <div>
+                    <div class="card">
+                        <h3 class="card-title">商談情報</h3>
+                        <div class="info-row">
+                            <div class="info-label">商談名</div>
+                            <div class="info-value">クラウド型CRM導入プロジェクト</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">顧客</div>
+                            <div class="info-value"><a href="customer_detail.html" style="color: #3498db; text-decoration: none;">株式会社ABC商事</a></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">担当者</div>
+                            <div class="info-value">SONODA MAYU</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">商談金額</div>
+                            <div class="info-value" style="color: #3498db; font-weight: 600; font-size: 18px;">¥4,800,000</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">ステージ</div>
+                            <div class="info-value"><span class="stage-badge">クロージング</span></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">成約確度</div>
+                            <div class="info-value" style="color: #27ae60; font-weight: 600;">85%</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">次回フォロー</div>
+                            <div class="info-value">2025/11/05 14:00</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">想定クロージング</div>
+                            <div class="info-value">2025/11/30</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">作成日</div>
+                            <div class="info-value">2025/10/01</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">最終更新</div>
+                            <div class="info-value">2025/10/28 14:30</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">活動履歴</h3>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-date">2025/10/28 14:30</div>
+                                <div class="timeline-content">📞 電話フォローアップ</div>
+                                <div class="timeline-detail">
+                                    田中部長と導入スケジュールについて協議。11月中の契約を目指す方向で合意。
+                                    専務の最終承認が必要とのこと。11/5に最終見積もりを提示予定。
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">2025/10/20 10:00</div>
+                                <div class="timeline-content">💻 デモンストレーション実施</div>
+                                <div class="timeline-detail">
+                                    本社会議室にてシステムデモを実施。参加者5名（田中部長、佐藤担当、専務含む）。
+                                    特にAI自動応答機能に高い評価。「他社より使いやすい」とのコメント。
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">2025/10/15 16:00</div>
+                                <div class="timeline-content">📧 提案書送付</div>
+                                <div class="timeline-detail">
+                                    システム提案書と概算見積もりをメール送付。
+                                    導入効果のシミュレーションも添付。
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">2025/10/10 11:00</div>
+                                <div class="timeline-content">🤝 初回訪問・ヒアリング</div>
+                                <div class="timeline-detail">
+                                    現状の課題と要望をヒアリング。<br>
+                                    【課題】顧客管理が Excel 管理で非効率、情報共有が遅い<br>
+                                    【要望】クラウドで一元管理、AI機能の活用、会計ソフト連携
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">2025/10/05 09:30</div>
+                                <div class="timeline-content">📞 アポイント取得</div>
+                                <div class="timeline-detail">
+                                    田中部長と電話でアポ取得。紹介元の推薦もあり好印象。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="card">
+                        <h3 class="card-title">次のアクション</h3>
+                        <div class="task-list">
+                            <div class="task-item">
+                                <div class="task-checkbox checked"></div>
+                                <div class="task-text completed">初回ヒアリング実施</div>
+                                <div class="task-date">完了</div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-checkbox checked"></div>
+                                <div class="task-text completed">提案書作成・送付</div>
+                                <div class="task-date">完了</div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-checkbox checked"></div>
+                                <div class="task-text completed">デモ実施</div>
+                                <div class="task-date">完了</div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-checkbox"></div>
+                                <div class="task-text"><strong>最終見積もり提示</strong></div>
+                                <div class="task-date">11/05</div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-checkbox"></div>
+                                <div class="task-text">専務への最終プレゼン</div>
+                                <div class="task-date">11/15</div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-checkbox"></div>
+                                <div class="task-text">契約書締結</div>
+                                <div class="task-date">11/30</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">重要事項</h3>
+                        <div style="font-size: 14px; color: #2c3e50; line-height: 1.8;">
+                            <p style="margin-bottom: 12px; padding: 10px; background: #fff3cd; border-radius: 3px;">
+                                <strong>⚠️ 重要:</strong> 年度末（3月）までの導入が必須条件
+                            </p>
+                            <p style="margin-bottom: 12px;">
+                                <strong>決裁者:</strong> 専務取締役 鈴木様
+                            </p>
+                            <p style="margin-bottom: 12px;">
+                                <strong>予算:</strong> 500万円まで承認済み
+                            </p>
+                            <p style="margin-bottom: 12px;">
+                                <strong>競合状況:</strong> 他社2社も提案中（当社が最有力）
+                            </p>
+                            <p style="margin-bottom: 12px;">
+                                <strong>優位性:</strong><br>
+                                • 早期提案で先行<br>
+                                • デモの高評価<br>
+                                • 紹介元の推薦あり<br>
+                                • AI機能が差別化要因
+                            </p>
+                            <p>
+                                <strong>懸念事項:</strong><br>
+                                • 専務の最終承認が必要<br>
+                                • 導入時期が年度末に間に合うか
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">商談アクション</h3>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button class="btn btn-primary" style="width: 100%;">📅 次回フォローを登録</button>
+                            <button class="btn btn-secondary" style="width: 100%;">📧 メール送信</button>
+                            <button class="btn btn-secondary" style="width: 100%;">📄 見積書作成</button>
+                            <button class="btn btn-success" style="width: 100%;">✓ 成約済みに更新</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 32px; padding-top: 24px; border-top: 2px solid #e1e8ed; text-align: center;">
+                <a href="demo_deals.html" class="btn btn-secondary">← 商談一覧に戻る</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
