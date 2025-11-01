@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAUDE SUITE - クラウド型顧客管理AIシステム | IT導入補助金対応</title>
+    <meta name="description" content="Claude AIを搭載したクラウド型顧客管理システム。IT導入補助金2025対応。顧客対応・販売支援・会計財務・経営分析をAIで効率化。">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; color: #1a1a1a; line-height: 1.6; }
+        
+        /* ヘッダー */
+        .header { background: #2c3e50; color: white; padding: 20px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; letter-spacing: 1px; }
+        .logo-sub { font-size: 11px; color: #bdc3c7; margin-top: 2px; }
+        .header-cta { background: #27ae60; color: white; padding: 12px 24px; border-radius: 3px; text-decoration: none; font-weight: 600; transition: background 0.3s; }
+        .header-cta:hover { background: #229954; }
+        
+        /* ヒーローセクション */
+        .hero { background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; padding: 80px 20px; text-align: center; }
+        .hero-content { max-width: 900px; margin: 0 auto; }
+        .hero-title { font-size: 42px; font-weight: 700; margin-bottom: 20px; line-height: 1.3; }
+        .hero-subtitle { font-size: 20px; margin-bottom: 30px; opacity: 0.9; }
+        .hero-badges { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+        .badge { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 3px; font-size: 14px; }
+        .hero-cta { display: inline-block; background: #3498db; color: white; padding: 16px 40px; border-radius: 3px; text-decoration: none; font-size: 18px; font-weight: 600; margin: 0 10px 10px 0; transition: all 0.3s; }
+        .hero-cta:hover { background: #2980b9; transform: translateY(-2px); }
+        .hero-cta-secondary { background: white; color: #2c3e50; }
+        .hero-cta-secondary:hover { background: #ecf0f1; }
+        
+        /* セクション共通 */
+        .section { padding: 80px 20px; }
+        .section-white { background: white; }
+        .section-gray { background: #f8f9fa; }
+        .section-content { max-width: 1200px; margin: 0 auto; }
+        .section-title { font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 20px; color: #2c3e50; }
+        .section-subtitle { font-size: 18px; text-align: center; color: #7f8c8d; margin-bottom: 60px; }
+        
+        /* 特徴グリッド */
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 40px; }
+        .feature-card { background: white; padding: 30px; border-radius: 3px; border: 1px solid #e1e8ed; transition: all 0.3s; }
+        .feature-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.1); transform: translateY(-5px); }
+        .feature-icon { font-size: 48px; margin-bottom: 20px; }
+        .feature-title { font-size: 20px; font-weight: 600; margin-bottom: 12px; color: #2c3e50; }
+        .feature-desc { color: #7f8c8d; font-size: 14px; line-height: 1.8; }
+        
+        /* プロセス対応 */
+        .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .process-card { background: white; padding: 24px; border-radius: 3px; border: 2px solid #3498db; text-align: center; }
+        .process-number { font-size: 14px; color: #3498db; font-weight: 600; margin-bottom: 8px; }
+        .process-name { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
+        .process-detail { font-size: 13px; color: #7f8c8d; }
+        
+        /* 仕様テーブル */
+        .spec-table { background: white; border-radius: 3px; overflow: hidden; border: 1px solid #e1e8ed; }
+        .spec-row { display: grid; grid-template-columns: 250px 1fr; border-bottom: 1px solid #f1f3f5; }
+        .spec-row:last-child { border-bottom: none; }
+        .spec-label { background: #f8f9fa; padding: 20px; font-weight: 600; color: #2c3e50; border-right: 1px solid #e1e8ed; }
+        .spec-value { padding: 20px; color: #2c3e50; }
+        
+        /* 料金プラン */
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .pricing-card { background: white; border-radius: 3px; padding: 40px 30px; border: 2px solid #e1e8ed; transition: all 0.3s; }
+        .pricing-card.featured { border-color: #3498db; box-shadow: 0 8px 30px rgba(52, 152, 219, 0.2); transform: scale(1.05); }
+        .pricing-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .plan-name { font-size: 24px; font-weight: 600; margin-bottom: 10px; color: #2c3e50; }
+        .plan-price { font-size: 42px; font-weight: 700; color: #3498db; margin-bottom: 5px; }
+        .plan-price-unit { font-size: 16px; color: #7f8c8d; }
+        .plan-features { list-style: none; margin: 30px 0; }
+        .plan-features li { padding: 12px 0; border-bottom: 1px solid #f1f3f5; font-size: 14px; color: #2c3e50; }
+        .plan-features li::before { content: "✓ "; color: #27ae60; font-weight: 600; margin-right: 8px; }
+        .plan-cta { display: block; background: #3498db; color: white; padding: 14px; border-radius: 3px; text-align: center; text-decoration: none; font-weight: 600; transition: background 0.3s; }
+        .plan-cta:hover { background: #2980b9; }
+        
+        /* 導入効果 */
+        .effect-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .effect-card { background: white; padding: 30px; border-radius: 3px; text-align: center; border: 1px solid #e1e8ed; }
+        .effect-number { font-size: 48px; font-weight: 700; color: #3498db; margin-bottom: 10px; }
+        .effect-label { font-size: 14px; color: #7f8c8d; }
+        
+        /* CTA */
+        .cta-section { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; padding: 80px 20px; text-align: center; }
+        .cta-title { font-size: 36px; font-weight: 700; margin-bottom: 20px; }
+        .cta-desc { font-size: 18px; margin-bottom: 40px; opacity: 0.9; }
+        .cta-button { display: inline-block; background: white; color: #3498db; padding: 18px 50px; border-radius: 3px; text-decoration: none; font-size: 18px; font-weight: 700; transition: all 0.3s; }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        
+        /* フッター */
+        .footer { background: #2c3e50; color: white; padding: 60px 20px 30px; }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { font-size: 16px; margin-bottom: 20px; }
+        .footer-section p, .footer-section a { font-size: 14px; color: #bdc3c7; line-height: 2; text-decoration: none; display: block; }
+        .footer-section a:hover { color: white; }
+        .footer-bottom { border-top: 1px solid #34495e; padding-top: 30px; text-align: center; color: #bdc3c7; font-size: 14px; }
+        
+        @media (max-width: 768px) {
+            .features-grid, .process-grid, .pricing-grid, .effect-grid, .footer-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 32px; }
+            .section-title { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <div class="logo">CLAUDE SUITE</div>
+                <div class="logo-sub">合同会社UMA</div>
+            </div>
+            <a href="#contact" class="header-cta">お問い合わせ</a>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Claude AI搭載<br>クラウド型顧客管理AIシステム</h1>
+            <p class="hero-subtitle">顧客対応から経営分析まで、4つの業務プロセスをAIで効率化</p>
+            <div class="hero-badges">
+                <span class="badge">✓ IT導入補助金2025対応</span>
+                <span class="badge">✓ Claude API搭載</span>
+                <span class="badge">✓ インボイス制度対応</span>
+                <span class="badge">✓ 会計ソフト連携</span>
+            </div>
+            <div>
+                <a href="../index.html" class="hero-cta">デモを見る</a>
+                <a href="#pricing" class="hero-cta hero-cta-secondary">料金プランを見る</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 主要機能 -->
+    <section class="section section-white">
+        <div class="section-content">
+            <h2 class="section-title">主要機能</h2>
+            <p class="section-subtitle">Claude AIの力で、複雑な業務を自動化・効率化</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3 class="feature-title">顧客管理</h3>
+                    <p class="feature-desc">1,000件以上の顧客データを一元管理。ステータス別・業種別の検索、売上実績の即座確認、顧客履歴の自動記録で、営業活動を支援します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h3 class="feature-title">商談・案件管理</h3>
+                    <p class="feature-desc">商談ステージ別の進捗管理、成約確度の可視化、フォローアップ予定の自動リマインド。商談から成約までのプロセスを見える化します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AI自動応答</h3>
+                    <p class="feature-desc">Claude AIが問い合わせに自動応答。月間800件以上の問い合わせに対応、平均応答時間2.3秒、24時間365日稼働で顧客満足度を向上。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📄</div>
+                    <h3 class="feature-title">請求書管理</h3>
+                    <p class="feature-desc">インボイス制度対応の適格請求書を自動生成。売掛残高管理、入金状況追跡、支払遅延アラートで確実な資金回収を実現します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💚</div>
+                    <h3 class="feature-title">会計ソフト連携</h3>
+                    <p class="feature-desc">freee・マネーフォワード・弥生会計など主要会計ソフトとCSV連携。請求データを自動同期し、経理業務を大幅削減します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3 class="feature-title">AI分析レポート</h3>
+                    <p class="feature-desc">AIが売上データを自動分析し、インサイトを生成。売上トレンド、改善提案、次のアクションを具体的に提示します。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- IT導入補助金対応プロセス -->
+    <section class="section section-gray">
+        <div class="section-content">
+            <h2 class="section-title">IT導入補助金2025 対応業務プロセス</h2>
+            <p class="section-subtitle">4つの業務プロセスに対応し、補助金申請要件を満たしています</p>
+            <div class="process-grid">
+                <div class="process-card">
+                    <div class="process-number">共P-01</div>
+                    <div class="process-name">顧客対応・販売支援</div>
+                    <div class="process-detail">顧客管理 / 商談管理 / AI自動応答 / 予約管理</div>
+                </div>
+                <div class="process-card">
+                    <div class="process-number">共P-02</div>
+                    <div class="process-name">顧客・案件管理</div>
+                    <div class="process-detail">案件進捗管理 / 商談ステージ管理 / フォローアップ</div>
+                </div>
+                <div class="process-card">
+                    <div class="process-number">共P-04</div>
+                    <div class="process-name">会計・財務・資産</div>
+                    <div class="process-detail">請求書発行 / 入金管理 / 会計ソフト連携</div>
+                </div>
+                <div class="process-card">
+                    <div class="process-number">共P-05</div>
+                    <div class="process-name">総務・人事・労務</div>
+                    <div class="process-detail">スケジュール管理 / タスク管理 / 活動記録</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 技術仕様 -->
+    <section class="section section-white">
+        <div class="section-content">
+            <h2 class="section-title">技術仕様・システム要件</h2>
+            <p class="section-subtitle">最新技術を活用した、安全で使いやすいクラウドシステム</p>
+            <div class="spec-table">
+                <div class="spec-row">
+                    <div class="spec-label">システム形態</div>
+                    <div class="spec-value">クラウド型SaaS（Software as a Service）</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">AI技術</div>
+                    <div class="spec-value">Claude API (Anthropic社) - 最新の大規模言語モデル</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">対応デバイス</div>
+                    <div class="spec-value">Windows / Mac / スマートフォン / タブレット（ブラウザベース）</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">推奨ブラウザ</div>
+                    <div class="spec-value">Google Chrome / Microsoft Edge / Safari（最新版）</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">データ保存</div>
+                    <div class="spec-value">クラウドストレージ（自動バックアップ：毎日3:00 AM）</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">セキュリティ</div>
+                    <div class="spec-value">SSL/TLS暗号化通信 / アクセス制御 / 二段階認証対応</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">外部連携</div>
+                    <div class="spec-value">freee / マネーフォワード / 弥生会計 / Google Calendar / Outlook</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">データエクスポート</div>
+                    <div class="spec-value">CSV / Excel / PDF形式対応</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">ユーザー数</div>
+                    <div class="spec-value">プランにより5名〜無制限</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">サポート</div>
+                    <div class="spec-value">メールサポート（全プラン） / 電話サポート（プレミアム以上） / オンライン完結型導入支援</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">インボイス対応</div>
+                    <div class="spec-value">適格請求書発行事業者登録番号対応 / 税率別集計 / 消費税額自動計算</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">稼働率</div>
+                    <div class="spec-value">99.9% SLA保証（年間停止時間8.76時間以内）</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 料金プラン -->
+    <section class="section section-gray" id="pricing">
+        <div class="section-content">
+            <h2 class="section-title">料金プラン</h2>
+            <p class="section-subtitle">IT導入補助金を活用すれば、最大2/3が補助対象</p>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="plan-name">スタンダード</div>
+                    <div class="plan-price">¥80,000</div>
+                    <div class="plan-price-unit">/ 月額（税別）</div>
+                    <ul class="plan-features">
+                        <li>ユーザー数: 10名まで</li>
+                        <li>顧客データ: 500件まで</li>
+                        <li>AI自動応答: 月500件まで</li>
+                        <li>請求書発行: 無制限</li>
+                        <li>会計ソフト連携</li>
+                        <li>メールサポート</li>
+                        <li>導入支援（オンライン）</li>
+                    </ul>
+                    <a href="#contact" class="plan-cta">お問い合わせ</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="plan-name">エンタープライズ ⭐人気</div>
+                    <div class="plan-price">¥150,000</div>
+                    <div class="plan-price-unit">/ 月額（税別）</div>
+                    <ul class="plan-features">
+                        <li>ユーザー数: 無制限</li>
+                        <li>顧客データ: 無制限</li>
+                        <li>AI自動応答: 無制限</li>
+                        <li>請求書発行: 無制限</li>
+                        <li>会計ソフト連携</li>
+                        <li>メール・電話サポート</li>
+                        <li>専任担当者</li>
+                        <li>カスタマイズ対応</li>
+                        <li>API連携無制限</li>
+                    </ul>
+                    <a href="#contact" class="plan-cta">お問い合わせ</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="plan-name">プレミアム</div>
+                    <div class="plan-price">¥120,000</div>
+                    <div class="plan-price-unit">/ 月額（税別）</div>
+                    <ul class="plan-features">
+                        <li>ユーザー数: 30名まで</li>
+                        <li>顧客データ: 2,000件まで</li>
+                        <li>AI自動応答: 月2,000件まで</li>
+                        <li>請求書発行: 無制限</li>
+                        <li>会計ソフト連携</li>
+                        <li>メール・電話サポート</li>
+                        <li>導入支援（オンライン）</li>
+                        <li>レポート自動生成</li>
+                    </ul>
+                    <a href="#contact" class="plan-cta">お問い合わせ</a>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px; padding: 20px; background: white; border-radius: 3px;">
+                <p style="font-size: 16px; color: #2c3e50; margin-bottom: 10px;"><strong>初期導入費用: ¥715,000（税別）</strong></p>
+                <p style="font-size: 14px; color: #7f8c8d;">システム設定・データ移行支援・操作研修を含む</p>
+                <p style="font-size: 14px; color: #3498db; margin-top: 15px;"><strong>★ IT導入補助金活用で実質負担額を大幅削減可能</strong></p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 導入効果 -->
+    <section class="section section-white">
+        <div class="section-content">
+            <h2 class="section-title">導入効果</h2>
+            <p class="section-subtitle">実際の導入企業における平均的な効果</p>
+            <div class="effect-grid">
+                <div class="effect-card">
+                    <div class="effect-number">78%</div>
+                    <div class="effect-label">問い合わせ対応の<br>自動化率</div>
+                </div>
+                <div class="effect-card">
+                    <div class="effect-number">65%</div>
+                    <div class="effect-label">営業活動の<br>効率化</div>
+                </div>
+                <div class="effect-card">
+                    <div class="effect-number">40時間</div>
+                    <div class="effect-label">月間業務削減<br>時間</div>
+                </div>
+                <div class="effect-card">
+                    <div class="effect-number">2.3秒</div>
+                    <div class="effect-label">平均AI<br>応答時間</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- セキュリティ対策 -->
+    <section class="section section-gray">
+        <div class="section-content">
+            <h2 class="section-title">セキュリティ対策</h2>
+            <p class="section-subtitle">企業の大切なデータを守る、万全のセキュリティ体制</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">SSL/TLS暗号化</h3>
+                    <p class="feature-desc">すべての通信を256bit SSL/TLS暗号化で保護。第三者による盗聴・改ざんを防止します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">アクセス制御</h3>
+                    <p class="feature-desc">ユーザー別の権限設定、IPアドレス制限、二段階認証に対応。不正アクセスを防ぎます。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3 class="feature-title">自動バックアップ</h3>
+                    <p class="feature-desc">毎日自動でデータをバックアップ。30日間の履歴を保持し、万が一の際も安心です。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA -->
+    <section class="cta-section" id="contact">
+        <div class="section-content">
+            <h2 class="cta-title">IT導入補助金を活用して<br>今すぐ業務効率化を始めませんか？</h2>
+            <p class="cta-desc">お問い合わせ・デモのご依頼はこちらから</p>
+            <a href="mailto:t@uma-s.com" class="cta-button">📧 t@uma-s.com でお問い合わせ</a>
+        </div>
+    </section>
+    
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>CLAUDE SUITE</h3>
+                    <p>合同会社UMA</p>
+                    <p>代表社員: SONODA MAYU</p>
+                    <p>〒814-0002<br>福岡県福岡市早良区西新２丁目２３−１８<br>ファーネスト百道浜通り 701号</p>
+                    <p>Email: t@uma-s.com</p>
+                </div>
+                <div class="footer-section">
+                    <h3>製品</h3>
+                    <a href="../index.html">デモサイト</a>
+                    <a href="#pricing">料金プラン</a>
+                    <a href="../invoice_detail.html">適格請求書サンプル</a>
+                </div>
+                <div class="footer-section">
+                    <h3>サポート</h3>
+                    <a href="mailto:t@uma-s.com">お問い合わせ</a>
+                    <a href="../README.md">導入ガイド</a>
+                </div>
+                <div class="footer-section">
+                    <h3>補助金対応</h3>
+                    <a href="#">IT導入補助金2025</a>
+                    <a href="#">4プロセス対応</a>
+                    <a href="#">インボイス制度対応</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 合同会社UMA. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
