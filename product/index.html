@@ -91,8 +91,11 @@
         .cta-section { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; padding: 80px 20px; text-align: center; }
         .cta-title { font-size: 36px; font-weight: 700; margin-bottom: 20px; }
         .cta-desc { font-size: 18px; margin-bottom: 40px; opacity: 0.9; }
-        .cta-button { display: inline-block; background: white; color: #3498db; padding: 18px 50px; border-radius: 3px; text-decoration: none; font-size: 18px; font-weight: 700; transition: all 0.3s; }
+        .cta-button { display: inline-block; background: white; color: #3498db; padding: 18px 50px; border-radius: 3px; text-decoration: none; font-size: 18px; font-weight: 700; transition: all 0.3s; word-break: break-word; }
         .cta-button:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        
+        /* レスポンシブ用追加スタイル */
+        .subsidy-highlight p { word-break: keep-all; }
         
         /* フッター */
         .footer { background: #2c3e50; color: white; padding: 60px 20px 30px; }
@@ -103,10 +106,88 @@
         .footer-section a:hover { color: white; }
         .footer-bottom { border-top: 1px solid #34495e; padding-top: 30px; text-align: center; color: #bdc3c7; font-size: 14px; }
         
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .process-grid { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .effect-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
         @media (max-width: 768px) {
-            .features-grid, .process-grid, .pricing-grid, .effect-grid, .footer-grid { grid-template-columns: 1fr; }
-            .hero-title { font-size: 32px; }
-            .section-title { font-size: 28px; }
+            /* ヘッダー */
+            .header-content { flex-direction: column; gap: 15px; }
+            .header-cta { width: 100%; text-align: center; }
+            
+            /* ヒーロー */
+            .hero { padding: 60px 20px; }
+            .hero-title { font-size: 28px; line-height: 1.4; }
+            .hero-subtitle { font-size: 16px; }
+            .hero-cta { display: block; width: 100%; margin: 0 0 10px 0; padding: 14px 20px; font-size: 16px; }
+            .hero-badges { flex-direction: column; }
+            
+            /* セクション */
+            .section { padding: 60px 20px; }
+            .section-title { font-size: 24px; }
+            .section-subtitle { font-size: 16px; margin-bottom: 40px; }
+            
+            /* グリッド */
+            .features-grid, .process-grid, .effect-grid { grid-template-columns: 1fr; gap: 20px; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-card.featured { transform: scale(1); }
+            
+            /* 仕様テーブル */
+            .spec-row { grid-template-columns: 1fr; }
+            .spec-label { border-right: none; border-bottom: 1px solid #e1e8ed; }
+            
+            /* 価格テーブル */
+            .price-table { overflow-x: auto; }
+            .price-table table { min-width: 600px; }
+            .price-table th, .price-table td { padding: 12px; font-size: 13px; }
+            
+            /* フッター */
+            .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+            .footer { padding: 40px 20px 20px; }
+            
+            /* CTA */
+            .cta-section { padding: 60px 20px; }
+            .cta-title { font-size: 24px; }
+            .cta-desc { font-size: 16px; }
+            .cta-button { display: block; width: 100%; padding: 16px 20px; font-size: 16px; }
+        }
+        
+        @media (max-width: 480px) {
+            /* ヒーロー */
+            .hero-title { font-size: 24px; }
+            .hero-subtitle { font-size: 14px; }
+            .badge { font-size: 12px; padding: 6px 12px; }
+            
+            /* セクション */
+            .section { padding: 40px 15px; }
+            .section-title { font-size: 22px; }
+            .section-subtitle { font-size: 14px; }
+            
+            /* 機能カード */
+            .feature-card { padding: 20px; }
+            .feature-icon { font-size: 36px; }
+            .feature-title { font-size: 18px; }
+            .feature-desc { font-size: 13px; }
+            
+            /* プロセスカード */
+            .process-card { padding: 16px; }
+            .process-name { font-size: 14px; }
+            .process-detail { font-size: 12px; }
+            
+            /* エフェクトカード */
+            .effect-number { font-size: 36px; }
+            .effect-label { font-size: 12px; }
+            
+            /* 価格ハイライト */
+            .price-highlight { font-size: 16px; }
+            
+            /* CTA */
+            .cta-title { font-size: 20px; }
+            .cta-desc { font-size: 14px; }
         }
     </style>
 </head>
@@ -374,7 +455,7 @@
                 </table>
             </div>
             
-            <div style="text-align: center; margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #eaf2f8 0%, #d5e8f7 100%); border-radius: 3px; border: 2px solid #3498db;">
+            <div class="subsidy-highlight" style="text-align: center; margin-top: 40px; padding: 30px 20px; background: linear-gradient(135deg, #eaf2f8 0%, #d5e8f7 100%); border-radius: 3px; border: 2px solid #3498db;">
                 <p style="font-size: 20px; color: #2c3e50; font-weight: 700; margin-bottom: 15px;">💰 IT導入補助金2025を活用すれば</p>
                 <p style="font-size: 32px; color: #3498db; font-weight: 700; margin-bottom: 10px;">最大 ¥3,200,000 の補助</p>
                 <p style="font-size: 16px; color: #7f8c8d; margin-bottom: 20px;">（補助率2/3の場合）</p>
