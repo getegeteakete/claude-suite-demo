@@ -11,20 +11,29 @@ IT導入補助金2025申請用デモサイト
 
 ## 📋 デモページ一覧
 
+### 主要ページ
 - **トップページ** (`index.html`) - デモサイト画面一覧
 - **製品LPページ** (`product/index.html`) - 製品概要・スペック・料金プラン（IT補助金申請用）
 - **ログイン画面** (`login.html`) - システムログイン
+
+### 管理画面
 - **ダッシュボード** (`demo_dashboard.html`) - 統計・KPI表示
 - **顧客管理** (`demo_customer.html`) - 顧客データ管理
 - **商談・案件管理** (`demo_deals.html`) - 商談進捗管理
 - **予約・スケジュール** (`demo_schedule.html`) - カレンダー・予定管理
 - **契約・請求管理** (`demo_contracts.html`) - 契約管理
 - **請求書管理** (`demo_invoices.html`) - 請求書一覧・売掛管理
-- **適格請求書** (`invoice_detail.html`) - インボイス制度対応請求書サンプル
 - **会計ソフト連携** (`demo_export.html`) - CSV出力・データエクスポート
 - **AI自動応答** (`demo_ai_response.html`) - Claude AI自動応答機能
 - **分析レポート** (`demo_report.html`) - AI分析・インサイト生成
 - **設定** (`demo_settings.html`) - システム設定
+
+### 詳細・編集画面（インタラクティブ機能）
+- **顧客詳細** (`customer_detail.html`) - 個別顧客の詳細情報・活動履歴
+- **顧客編集** (`customer_edit.html`) - 顧客情報編集フォーム
+- **新規顧客登録** (`customer_new.html`) - 新規顧客登録フォーム（AI自動補完機能付き）
+- **商談詳細** (`deal_detail.html`) - 個別商談の詳細・進捗管理
+- **適格請求書** (`invoice_detail.html`) - インボイス制度対応請求書サンプル
 
 ## 🚀 使い方
 
