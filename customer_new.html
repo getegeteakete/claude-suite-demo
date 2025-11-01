@@ -52,6 +52,27 @@
         .ai-helper-title { font-size: 12px; font-weight: 600; color: #27ae60; margin-bottom: 6px; }
         .ai-helper-text { font-size: 13px; color: #2c3e50; }
         .required-note { font-size: 13px; color: #7f8c8d; margin-bottom: 20px; }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .menu-item { padding: 10px 20px; font-size: 13px; }
+            .main-content { padding: 20px; }
+            
+            .page-title { font-size: 22px; }
+            .form-card { padding: 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-actions { flex-direction: column; }
+            .form-actions .btn { width: 100%; }
+        }
+        
+        @media (max-width: 480px) {
+            .main-content { padding: 16px; }
+            .page-title { font-size: 20px; }
+            .form-card { padding: 16px; }
+            .form-section-title { font-size: 16px; }
+        }
     </style>
 </head>
 <body>

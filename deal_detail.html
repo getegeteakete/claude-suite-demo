@@ -76,6 +76,35 @@
         .btn-secondary:hover { background: #f8f9fa; }
         .btn-success { background: #27ae60; color: white; }
         .btn-success:hover { background: #229954; }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .content-grid { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .menu-item { padding: 10px 20px; font-size: 13px; }
+            .main-content { padding: 20px; }
+            
+            .deal-header { padding: 20px; }
+            .deal-title { font-size: 22px; }
+            .deal-amount-large { font-size: 28px; }
+            .deal-meta-row { flex-direction: column; gap: 12px; align-items: flex-start; }
+            
+            .content-grid { grid-template-columns: 1fr; }
+            .info-row { grid-template-columns: 1fr; gap: 8px; }
+            .info-label { font-weight: 600; }
+        }
+        
+        @media (max-width: 480px) {
+            .main-content { padding: 16px; }
+            .deal-title { font-size: 18px; }
+            .deal-amount-large { font-size: 24px; }
+            .card { padding: 16px; }
+            .breadcrumb { font-size: 12px; margin-bottom: 16px; }
+        }
     </style>
 </head>
 <body>

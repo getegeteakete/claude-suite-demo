@@ -50,6 +50,29 @@
         .toggle::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 2px; top: 2px; right: 2px; transition: all 0.3s; }
         .toggle.off { background: #bdc3c7; }
         .toggle.off::after { right: auto; left: 2px; }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .content-grid { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .menu-item { padding: 10px 20px; font-size: 13px; }
+            .main-content { padding: 20px; }
+            
+            .page-title { font-size: 20px; }
+            .stats-row { grid-template-columns: 1fr; }
+            .content-grid { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 480px) {
+            .main-content { padding: 16px; }
+            .page-title { font-size: 18px; }
+            .stat-card, .card { padding: 16px; }
+        }
     </style>
 </head>
 <body>

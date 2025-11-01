@@ -51,6 +51,36 @@
         .text-right { text-align: right; }
         .amount-large { font-size: 16px; font-weight: 600; }
         .amount-unpaid { color: #e74c3c; }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .stats-row { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .menu-item { padding: 10px 20px; font-size: 13px; }
+            .main-content { padding: 20px; }
+            
+            .page-header { flex-direction: column; gap: 16px; align-items: stretch; }
+            .page-header div { display: flex; flex-direction: column; gap: 10px; }
+            .btn-primary, .btn-export { width: 100%; margin-left: 0; }
+            
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .filter-bar { flex-direction: column; }
+            .search-input, .filter-select { width: 100%; }
+            .invoice-list { overflow-x: auto; }
+            table { min-width: 900px; }
+        }
+        
+        @media (max-width: 480px) {
+            .main-content { padding: 16px; }
+            .stats-row { grid-template-columns: 1fr; }
+            .stat-value { font-size: 20px; }
+            table { font-size: 12px; }
+            th, td { padding: 10px 8px; }
+        }
     </style>
 </head>
 <body>

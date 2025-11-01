@@ -24,6 +24,30 @@
         .info-list li::before { content: "✓ "; color: #27ae60; font-weight: bold; margin-right: 8px; }
         .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; }
         .footer { text-align: center; color: white; margin-top: 32px; font-size: 13px; opacity: 0.7; }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .demo-grid { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 20px; }
+            .title { font-size: 28px; }
+            .company { font-size: 14px; }
+            .subtitle { font-size: 14px; }
+            .demo-grid { gap: 16px; }
+            .demo-card { padding: 20px; }
+            .demo-title { font-size: 18px; }
+            .demo-desc { font-size: 12px; }
+            .info-box { padding: 20px; }
+        }
+        
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+            .title { font-size: 24px; }
+            .demo-card { padding: 16px; }
+            .demo-title { font-size: 16px; }
+        }
     </style>
 </head>
 <body>
