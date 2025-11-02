@@ -32,8 +32,13 @@ IT導入補助金2025申請用デモサイト
 - **顧客詳細** (`customer_detail.html`) - 個別顧客の詳細情報・活動履歴
 - **顧客編集** (`customer_edit.html`) - 顧客情報編集フォーム
 - **新規顧客登録** (`customer_new.html`) - 新規顧客登録フォーム（AI自動補完機能付き）
-- **商談詳細** (`deal_detail.html`) - 個別商談の詳細・進捗管理
+- **商談詳細** (`deal_detail.html`) - 個別商談の詳細・進捗管理・AIインサイト
+- **新規商談登録** (`deal_new.html`) - 新規商談登録フォーム（AI支援機能付き）
+- **契約詳細** (`contract_detail.html`) - 個別契約の詳細・請求履歴
 - **適格請求書** (`invoice_detail.html`) - インボイス制度対応請求書サンプル
+- **新規請求書作成** (`invoice_new.html`) - 請求書作成フォーム（自動計算機能付き）
+- **新規予約登録** (`schedule_new.html`) - スケジュール予約登録フォーム
+- **AI会話履歴** (`ai_conversation.html`) - AI自動応答の詳細な会話ログ
 
 ## 🚀 使い方
 
