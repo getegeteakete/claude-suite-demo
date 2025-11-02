@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>契約詳細 - #CON-1001 | CLAUDE SUITE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; max-width: 1000px; }
+        
+        .breadcrumb { margin-bottom: 24px; font-size: 14px; color: #7f8c8d; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        
+        .page-header { background: white; padding: 32px; border-radius: 3px; border: 1px solid #e1e8ed; margin-bottom: 24px; }
+        .contract-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 16px; }
+        .contract-meta { display: flex; gap: 20px; align-items: center; }
+        .status-badge { display: inline-block; padding: 6px 14px; border-radius: 3px; font-size: 12px; font-weight: 600; background: #d5f4e6; color: #1e7e34; }
+        
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; }
+        
+        .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+        .card { background: white; padding: 24px; border-radius: 3px; border: 1px solid #e1e8ed; margin-bottom: 24px; }
+        .card-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: #2c3e50; }
+        
+        .info-row { display: grid; grid-template-columns: 160px 1fr; padding: 12px 0; border-bottom: 1px solid #f1f3f5; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { font-size: 13px; color: #7f8c8d; font-weight: 500; }
+        .info-value { font-size: 14px; color: #2c3e50; font-weight: 500; }
+        
+        .invoice-history { }
+        .invoice-item { padding: 12px; border: 1px solid #e1e8ed; border-radius: 3px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .invoice-info { flex: 1; }
+        .invoice-number { font-weight: 600; font-size: 13px; color: #2c3e50; }
+        .invoice-date { font-size: 12px; color: #7f8c8d; }
+        .invoice-amount { font-weight: 600; color: #3498db; margin-right: 12px; }
+        .invoice-status { font-size: 11px; padding: 3px 8px; border-radius: 3px; background: #d5f4e6; color: #1e7e34; }
+        
+        .btn { padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-secondary { background: white; color: #2c3e50; border: 1px solid #ddd; }
+        .btn-secondary:hover { background: #f8f9fa; }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .main-content { padding: 20px; }
+            .content-grid { grid-template-columns: 1fr; }
+            .info-row { grid-template-columns: 1fr; gap: 4px; }
+            .info-label { font-weight: 600; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📊</span><span>ダッシュボード</span></div></a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">👥</span><span>顧客管理</span></div></a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">💼</span><span>商談・案件管理</span></div></a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📅</span><span>予約・スケジュール</span></div></a>
+            <div class="menu-item active"><span class="menu-icon">📄</span><span>契約・請求管理</span></div>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📈</span><span>分析レポート</span></div></a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">🤖</span><span>AI自動応答<span class="ai-badge">AI</span></span></div></a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">⚙️</span><span>設定</span></div></a>
+        </div>
+        
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="demo_contracts.html">契約・請求管理</a> / 契約詳細
+            </div>
+            
+            <div class="page-header">
+                <h1 class="contract-title">株式会社ABC商事との契約</h1>
+                <div class="contract-meta">
+                    <span class="status-badge">有効</span>
+                    <span style="font-size: 14px; color: #7f8c8d;">契約ID: #CON-1001</span>
+                    <a href="customer_detail.html" style="font-size: 14px; color: #3498db; text-decoration: none;">📋 顧客情報を見る</a>
+                </div>
+            </div>
+            
+            <div class="content-grid">
+                <div>
+                    <div class="card">
+                        <h3 class="card-title">契約情報</h3>
+                        <div class="info-row">
+                            <div class="info-label">契約ID</div>
+                            <div class="info-value">#CON-1001</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">顧客名</div>
+                            <div class="info-value"><a href="customer_detail.html" style="color: #3498db; text-decoration: none;">株式会社ABC商事</a></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">プラン</div>
+                            <div class="info-value">エンタープライズ</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">月額契約金額</div>
+                            <div class="info-value" style="color: #3498db; font-weight: 600; font-size: 18px;">¥150,000</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">契約開始日</div>
+                            <div class="info-value">2024年4月1日</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">契約更新日</div>
+                            <div class="info-value">2025年4月1日</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">自動更新</div>
+                            <div class="info-value">有効</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">ステータス</div>
+                            <div class="info-value"><span class="status-badge">有効</span></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">担当者</div>
+                            <div class="info-value">SONODA MAYU</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">提供サービス</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 10px 0; border-bottom: 1px solid #f1f3f5; font-size: 14px; color: #2c3e50;">
+                                <span style="margin-right: 8px;">✓</span> ユーザー数: 無制限
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #f1f3f5; font-size: 14px; color: #2c3e50;">
+                                <span style="margin-right: 8px;">✓</span> 顧客データ: 無制限
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #f1f3f5; font-size: 14px; color: #2c3e50;">
+                                <span style="margin-right: 8px;">✓</span> AI自動応答: 無制限
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #f1f3f5; font-size: 14px; color: #2c3e50;">
+                                <span style="margin-right: 8px;">✓</span> 会計ソフト連携
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #f1f3f5; font-size: 14px; color: #2c3e50;">
+                                <span style="margin-right: 8px;">✓</span> 24時間サポート
+                            </li>
+                            <li style="padding: 10px 0; font-size: 14px; color: #2c3e50;">
+                                <span style="margin-right: 8px;">✓</span> API連携無制限
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="card">
+                        <h3 class="card-title">請求履歴</h3>
+                        <div class="invoice-history">
+                            <a href="invoice_detail.html" style="text-decoration: none; color: inherit;">
+                                <div class="invoice-item" style="cursor: pointer;">
+                                    <div class="invoice-info">
+                                        <div class="invoice-number">INV-2025-0187</div>
+                                        <div class="invoice-date">2025年11月1日</div>
+                                    </div>
+                                    <div class="invoice-amount">¥165,000</div>
+                                    <div class="invoice-status">入金済</div>
+                                </div>
+                            </a>
+                            <div class="invoice-item">
+                                <div class="invoice-info">
+                                    <div class="invoice-number">INV-2025-0175</div>
+                                    <div class="invoice-date">2025年10月1日</div>
+                                </div>
+                                <div class="invoice-amount">¥165,000</div>
+                                <div class="invoice-status">入金済</div>
+                            </div>
+                            <div class="invoice-item">
+                                <div class="invoice-info">
+                                    <div class="invoice-number">INV-2025-0163</div>
+                                    <div class="invoice-date">2025年9月1日</div>
+                                </div>
+                                <div class="invoice-amount">¥165,000</div>
+                                <div class="invoice-status">入金済</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e1e8ed; text-align: center;">
+                            <a href="demo_invoices.html" style="font-size: 13px; color: #3498db; text-decoration: none;">すべての請求書を見る →</a>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">契約統計</h3>
+                        <div style="text-align: center; padding: 20px 0;">
+                            <div style="font-size: 12px; color: #7f8c8d; margin-bottom: 8px;">累計支払額</div>
+                            <div style="font-size: 32px; font-weight: 700; color: #3498db; margin-bottom: 20px;">¥2,805,000</div>
+                            <div style="font-size: 12px; color: #7f8c8d; margin-bottom: 8px;">契約期間</div>
+                            <div style="font-size: 20px; font-weight: 600; color: #2c3e50;">17ヶ月</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">アクション</h3>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button class="btn btn-primary" style="width: 100%;">📄 請求書を発行</button>
+                            <button class="btn btn-secondary" style="width: 100%;">✏️ 契約内容を変更</button>
+                            <button class="btn btn-secondary" style="width: 100%;">🔄 プラン変更</button>
+                            <button class="btn btn-secondary" style="width: 100%; color: #e74c3c; border-color: #e74c3c;">⚠️ 契約を解除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="demo_contracts.html" class="btn btn-secondary">← 契約一覧に戻る</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

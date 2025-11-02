@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI応答履歴詳細 | CLAUDE SUITE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; max-width: 900px; }
+        
+        .breadcrumb { margin-bottom: 24px; font-size: 14px; color: #7f8c8d; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        
+        .page-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
+        .page-meta { font-size: 14px; color: #7f8c8d; margin-bottom: 32px; }
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; }
+        
+        .conversation-card { background: white; padding: 32px; border-radius: 3px; border: 1px solid #e1e8ed; margin-bottom: 24px; }
+        .conversation-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #e1e8ed; }
+        .customer-info { display: flex; align-items: center; gap: 12px; }
+        .customer-avatar { width: 40px; height: 40px; background: #3498db; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+        .customer-name { font-size: 16px; font-weight: 600; color: #2c3e50; }
+        .customer-email { font-size: 13px; color: #7f8c8d; }
+        .satisfaction { display: flex; gap: 4px; }
+        .star { color: #f39c12; font-size: 18px; }
+        
+        .chat-container { }
+        .message { margin-bottom: 24px; }
+        .message-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .message-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; }
+        .message-avatar.customer { background: #3498db; color: white; }
+        .message-avatar.ai { background: #27ae60; color: white; }
+        .message-sender { font-weight: 600; font-size: 14px; color: #2c3e50; }
+        .message-time { font-size: 12px; color: #95a5a6; }
+        .message-content { background: #f8f9fa; padding: 16px; border-radius: 3px; font-size: 14px; line-height: 1.7; color: #2c3e50; margin-left: 42px; }
+        .message.ai .message-content { background: #eaf2f8; border-left: 3px solid #3498db; }
+        
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+        .stat-box { background: #f8f9fa; padding: 16px; border-radius: 3px; text-align: center; }
+        .stat-label { font-size: 11px; color: #7f8c8d; margin-bottom: 6px; }
+        .stat-value { font-size: 18px; font-weight: 600; color: #2c3e50; }
+        
+        .btn { padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; text-decoration: none; display: inline-block; }
+        .btn-secondary { background: white; color: #2c3e50; border: 1px solid #ddd; }
+        .btn-secondary:hover { background: #f8f9fa; }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .main-content { padding: 20px; }
+            .conversation-card { padding: 20px; }
+            .conversation-meta { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .stats-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📊</span><span>ダッシュボード</span></div></a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">👥</span><span>顧客管理</span></div></a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">💼</span><span>商談・案件管理</span></div></a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📅</span><span>予約・スケジュール</span></div></a>
+            <a href="demo_invoices.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📄</span><span>請求書管理</span></div></a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📈</span><span>分析レポート</span></div></a>
+            <div class="menu-item active"><span class="menu-icon">🤖</span><span>AI自動応答<span class="ai-badge">AI</span></span></div>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">⚙️</span><span>設定</span></div></a>
+        </div>
+        
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="demo_ai_response.html">AI自動応答</a> / 会話履歴詳細
+            </div>
+            
+            <h1 class="page-title">AI応答履歴詳細<span class="ai-badge">Claude AI</span></h1>
+            <p class="page-meta">2025年11月1日 14:25 の会話</p>
+            
+            <div class="conversation-card">
+                <div class="conversation-meta">
+                    <div class="customer-info">
+                        <div class="customer-avatar">田</div>
+                        <div>
+                            <div class="customer-name">株式会社ABC商事 田中太郎 様</div>
+                            <div class="customer-email">tanaka@abc.co.jp</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 12px; color: #7f8c8d; margin-bottom: 4px;">顧客満足度</div>
+                        <div class="satisfaction">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="message">
+                        <div class="message-header">
+                            <div class="message-avatar customer">田</div>
+                            <span class="message-sender">田中太郎</span>
+                            <span class="message-time">14:25:12</span>
+                        </div>
+                        <div class="message-content">
+                            貴社のクラウド型顧客管理システムの料金プランについて詳しく教えてください。また、導入期間はどのくらいかかりますか？
+                        </div>
+                    </div>
+                    
+                    <div class="message ai">
+                        <div class="message-header">
+                            <div class="message-avatar ai">AI</div>
+                            <span class="message-sender">Claude AI</span>
+                            <span class="message-time">14:25:14</span>
+                        </div>
+                        <div class="message-content">
+                            お問い合わせいただきありがとうございます。<br><br>
+                            
+                            CLAUDE SUITEの料金プランは以下の通りです：<br><br>
+                            
+                            <strong>【月額料金】</strong><br>
+                            • スタンダードプラン: 80,000円（税別）<br>
+                            • プレミアムプラン: 120,000円（税別）<br>
+                            • エンタープライズプラン: 150,000円（税別）<br><br>
+                            
+                            <strong>【初期導入費用】</strong><br>
+                            • 715,000円（税別）<br>
+                            （システム設定・データ移行支援・操作研修を含む）<br><br>
+                            
+                            <strong>【導入期間】</strong><br>
+                            通常2〜3週間で導入が完了します。すべてオンラインで完結しますので、訪問の必要はございません。<br><br>
+                            
+                            詳細な見積もりやデモンストレーションをご希望の場合は、お気軽にお申し付けください。
+                        </div>
+                    </div>
+                    
+                    <div class="message">
+                        <div class="message-header">
+                            <div class="message-avatar customer">田</div>
+                            <span class="message-sender">田中太郎</span>
+                            <span class="message-time">14:26:45</span>
+                        </div>
+                        <div class="message-content">
+                            ありがとうございます。IT導入補助金は使えますか？
+                        </div>
+                    </div>
+                    
+                    <div class="message ai">
+                        <div class="message-header">
+                            <div class="message-avatar ai">AI</div>
+                            <span class="message-sender">Claude AI</span>
+                            <span class="message-time">14:26:47</span>
+                        </div>
+                        <div class="message-content">
+                            はい、CLAUDE SUITEはIT導入補助金2025に対応しております。<br><br>
+                            
+                            <strong>【対応状況】</strong><br>
+                            • 4つ以上の業務プロセスに対応<br>
+                            • AI機能を実装（Claude API）<br>
+                            • クラウド型SaaS提供<br>
+                            • セキュリティ対策完備<br>
+                            • オンライン完結型導入<br><br>
+                            
+                            補助金を活用すれば、最大で導入費用の2/3（約320万円）が補助対象となる可能性があります。<br><br>
+                            
+                            詳しい申請サポートも行っておりますので、ご相談ください。
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-label">応答時間</div>
+                        <div class="stat-value">2.1秒</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">メッセージ数</div>
+                        <div class="stat-value">4件</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">解決率</div>
+                        <div class="stat-value">100%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="demo_ai_response.html" class="btn btn-secondary">← AI自動応答一覧に戻る</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

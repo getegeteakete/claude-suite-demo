@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規請求書作成 | CLAUDE SUITE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; max-width: 900px; }
+        
+        .breadcrumb { margin-bottom: 24px; font-size: 14px; color: #7f8c8d; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        
+        .page-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 32px; }
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; }
+        
+        .form-card { background: white; padding: 32px; border-radius: 3px; border: 1px solid #e1e8ed; margin-bottom: 24px; }
+        .form-section-title { font-size: 18px; font-weight: 600; margin-bottom: 24px; color: #2c3e50; padding-bottom: 12px; border-bottom: 2px solid #e1e8ed; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 24px; }
+        .form-group { }
+        .form-label { display: block; font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .form-input:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); }
+        .form-select { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        
+        .btn { padding: 12px 24px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-secondary { background: white; color: #2c3e50; border: 1px solid #ddd; }
+        .btn-secondary:hover { background: #f8f9fa; }
+        
+        .form-actions { display: flex; gap: 12px; justify-content: center; padding-top: 24px; border-top: 2px solid #e1e8ed; }
+        
+        .item-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 12px; margin-bottom: 12px; align-items: end; }
+        .btn-remove { background: #e74c3c; color: white; padding: 10px 16px; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; }
+        .btn-add { background: #27ae60; color: white; padding: 10px 16px; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; width: 100%; }
+        
+        .preview-box { background: #f8f9fa; padding: 20px; border-radius: 3px; border: 1px solid #e1e8ed; margin-top: 20px; }
+        .preview-label { font-size: 12px; color: #7f8c8d; font-weight: 600; margin-bottom: 8px; }
+        .preview-value { font-size: 20px; font-weight: 700; color: #3498db; }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .main-content { padding: 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .item-row { grid-template-columns: 1fr; gap: 8px; }
+            .form-actions { flex-direction: column; }
+            .form-actions .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📊</span><span>ダッシュボード</span></div></a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">👥</span><span>顧客管理</span></div></a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">💼</span><span>商談・案件管理</span></div></a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📅</span><span>予約・スケジュール</span></div></a>
+            <div class="menu-item active"><span class="menu-icon">📄</span><span>請求書管理</span></div>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📈</span><span>分析レポート</span></div></a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">🤖</span><span>AI自動応答<span class="ai-badge">AI</span></span></div></a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">⚙️</span><span>設定</span></div></a>
+        </div>
+        
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="demo_invoices.html">請求書管理</a> / 新規請求書作成
+            </div>
+            
+            <h1 class="page-title">新規請求書作成<span class="ai-badge">自動計算</span></h1>
+            
+            <div class="form-card">
+                <h3 class="form-section-title">請求先情報</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">顧客 <span style="color: #e74c3c;">*</span></label>
+                        <select class="form-select" required>
+                            <option value="">顧客を選択してください</option>
+                            <option>株式会社ABC商事</option>
+                            <option>XYZ株式会社</option>
+                            <option>株式会社GHI製作所</option>
+                            <option>STU インダストリーズ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">請求日 <span style="color: #e74c3c;">*</span></label>
+                        <input type="date" class="form-input" value="2025-11-01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">お支払期限</label>
+                        <input type="date" class="form-input" value="2025-11-30">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">請求書番号</label>
+                        <input type="text" class="form-input" value="INV-2025-0188" readonly style="background: #f8f9fa;">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-card">
+                <h3 class="form-section-title">請求明細</h3>
+                <div class="item-row">
+                    <div class="form-group">
+                        <label class="form-label">商品・サービス名</label>
+                        <input type="text" class="form-input" value="CLAUDE SUITE エンタープライズプラン">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">数量</label>
+                        <input type="number" class="form-input" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">単価（税抜）</label>
+                        <input type="number" class="form-input" value="150000">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">税率</label>
+                        <select class="form-select">
+                            <option selected>10%</option>
+                            <option>8%</option>
+                            <option>0%</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label" style="opacity: 0;">削除</label>
+                        <button class="btn-remove">削除</button>
+                    </div>
+                </div>
+                
+                <button class="btn-add">+ 明細行を追加</button>
+                
+                <div class="preview-box">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div>
+                            <div class="preview-label">小計（税抜）</div>
+                            <div class="preview-value">¥150,000</div>
+                        </div>
+                        <div>
+                            <div class="preview-label">消費税額</div>
+                            <div class="preview-value">¥15,000</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #2c3e50;">
+                        <div class="preview-label">税込合計金額</div>
+                        <div style="font-size: 32px; font-weight: 700; color: #3498db;">¥165,000</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <a href="demo_invoices.html" class="btn btn-secondary">キャンセル</a>
+                <button class="btn btn-primary">📄 プレビュー表示</button>
+                <button class="btn btn-primary" style="background: #27ae60;">💾 保存して発行</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

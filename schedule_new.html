@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規予約登録 | CLAUDE SUITE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; max-width: 800px; }
+        
+        .breadcrumb { margin-bottom: 24px; font-size: 14px; color: #7f8c8d; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        
+        .page-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 32px; }
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; }
+        
+        .form-card { background: white; padding: 32px; border-radius: 3px; border: 1px solid #e1e8ed; margin-bottom: 24px; }
+        .form-section-title { font-size: 18px; font-weight: 600; margin-bottom: 24px; color: #2c3e50; padding-bottom: 12px; border-bottom: 2px solid #e1e8ed; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 24px; }
+        .form-group { }
+        .form-label { display: block; font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .form-input:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); }
+        .form-select { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .form-textarea { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; min-height: 100px; resize: vertical; font-family: inherit; }
+        
+        .btn { padding: 12px 24px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-secondary { background: white; color: #2c3e50; border: 1px solid #ddd; }
+        .btn-secondary:hover { background: #f8f9fa; }
+        
+        .form-actions { display: flex; gap: 12px; justify-content: center; padding-top: 24px; border-top: 2px solid #e1e8ed; }
+        .event-type-selector { display: flex; gap: 12px; margin-bottom: 20px; }
+        .event-type-btn { padding: 10px 20px; border: 2px solid #e1e8ed; border-radius: 3px; background: white; cursor: pointer; transition: all 0.2s; }
+        .event-type-btn.selected { border-color: #3498db; background: #eaf2f8; color: #3498db; font-weight: 600; }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .menu-item { padding: 10px 20px; font-size: 13px; }
+            .main-content { padding: 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-actions { flex-direction: column; }
+            .form-actions .btn { width: 100%; }
+            .event-type-selector { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📊</span><span>ダッシュボード</span></div></a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">👥</span><span>顧客管理</span></div></a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">💼</span><span>商談・案件管理</span></div></a>
+            <div class="menu-item active"><span class="menu-icon">📅</span><span>予約・スケジュール</span></div>
+            <a href="demo_contracts.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📄</span><span>契約・請求管理</span></div></a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📈</span><span>分析レポート</span></div></a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">🤖</span><span>AI自動応答<span class="ai-badge">AI</span></span></div></a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">⚙️</span><span>設定</span></div></a>
+        </div>
+        
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="demo_schedule.html">予約・スケジュール</a> / 新規予約登録
+            </div>
+            
+            <h1 class="page-title">新規予約登録</h1>
+            
+            <div class="form-card">
+                <h3 class="form-section-title">予約種別</h3>
+                <div class="event-type-selector">
+                    <button class="event-type-btn selected">🤝 商談</button>
+                    <button class="event-type-btn">📞 電話</button>
+                    <button class="event-type-btn">💻 デモ</button>
+                    <button class="event-type-btn">✉️ その他</button>
+                </div>
+            </div>
+            
+            <div class="form-card">
+                <h3 class="form-section-title">基本情報</h3>
+                <div class="form-group">
+                    <label class="form-label">件名 <span style="color: #e74c3c;">*</span></label>
+                    <input type="text" class="form-input" placeholder="例: ABC商事 商談" required>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">顧客</label>
+                        <select class="form-select">
+                            <option>株式会社ABC商事</option>
+                            <option>XYZ株式会社</option>
+                            <option>DEF コーポレーション</option>
+                            <option>その他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">関連商談</label>
+                        <select class="form-select">
+                            <option>なし</option>
+                            <option>クラウド型CRM導入プロジェクト</option>
+                            <option>業務システム刷新提案</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">開始日時 <span style="color: #e74c3c;">*</span></label>
+                        <input type="datetime-local" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">終了日時</label>
+                        <input type="datetime-local" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">場所</label>
+                        <select class="form-select">
+                            <option>オンライン会議</option>
+                            <option>本社会議室A</option>
+                            <option>本社会議室B</option>
+                            <option>先方オフィス</option>
+                            <option>その他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">担当者</label>
+                        <select class="form-select">
+                            <option selected>SONODA MAYU</option>
+                            <option>山田太郎</option>
+                            <option>佐藤花子</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">詳細・メモ</label>
+                    <textarea class="form-textarea" placeholder="議題、参加者、準備事項などを記入"></textarea>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <a href="demo_schedule.html" class="btn btn-secondary">キャンセル</a>
+                <button class="btn btn-primary">💾 保存してスケジュールへ</button>
+                <button class="btn btn-primary" style="background: #27ae60;">💾 保存してリマインダー設定</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
