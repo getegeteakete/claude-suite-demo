@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAUDE SUITE - ワークフロー通知設定</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; max-width: 1000px; margin: 0 auto; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .page-title { font-size: 24px; font-weight: 600; color: #2c3e50; }
+        .breadcrumb { font-size: 13px; color: #7f8c8d; margin-bottom: 10px; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .btn-primary { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-block; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-secondary { background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-left: 10px; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; letter-spacing: 0.3px; }
+        .section-card { background: white; border-radius: 3px; border: 1px solid #e1e8ed; padding: 28px; margin-bottom: 20px; }
+        .section-title { font-size: 18px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #e1e8ed; display: flex; align-items: center; gap: 10px; }
+        .section-description { font-size: 13px; color: #7f8c8d; margin-bottom: 20px; line-height: 1.6; }
+        .notification-item { border: 1px solid #e1e8ed; border-radius: 3px; padding: 20px; margin-bottom: 16px; background: #fafbfc; }
+        .notification-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .notification-title { font-size: 15px; font-weight: 600; color: #2c3e50; }
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 26px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #27ae60; }
+        input:checked + .slider:before { transform: translateX(24px); }
+        .notification-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
+        .option-group { }
+        .option-label { font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; display: block; }
+        .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+        .checkbox-item { display: flex; align-items: center; gap: 8px; }
+        .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+        .checkbox-item label { font-size: 13px; color: #2c3e50; cursor: pointer; }
+        .form-input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .form-select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .form-textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 100px; }
+        .form-description { font-size: 12px; color: #7f8c8d; margin-top: 5px; }
+        .info-box { background: #e8f4f8; border-left: 4px solid #3498db; padding: 16px; border-radius: 3px; margin-bottom: 20px; }
+        .info-box-title { font-size: 14px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
+        .info-box-text { font-size: 13px; color: #2c3e50; line-height: 1.6; }
+        
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .main-content { padding: 20px; }
+            .notification-options { grid-template-columns: 1fr; }
+            .notification-header { flex-direction: column; gap: 12px; align-items: start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📊</span><span>ダッシュボード</span></div></a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">👥</span><span>顧客管理</span></div></a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">💼</span><span>商談・案件管理</span></div></a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📅</span><span>予約・スケジュール</span></div></a>
+            <a href="demo_invoices.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📄</span><span>請求書管理</span></div></a>
+            <a href="demo_workflow.html" style="text-decoration: none; color: inherit;"><div class="menu-item active"><span class="menu-icon">🔄</span><span>ワークフロー</span></div></a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📈</span><span>分析レポート</span></div></a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">🤖</span><span>AI自動応答<span class="ai-badge">AI</span></span></div></a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">⚙️</span><span>設定</span></div></a>
+        </div>
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="demo_workflow.html">ワークフロー管理</a> / 通知設定
+            </div>
+            <div class="page-header">
+                <h1 class="page-title">ワークフロー通知設定</h1>
+                <div>
+                    <button class="btn-primary">💾 保存</button>
+                    <button class="btn-secondary">キャンセル</button>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-title">🔔 通知設定について</div>
+                <div class="info-box-text">
+                    ワークフローの各イベント（申請、承認、差戻しなど）発生時の通知方法を設定できます。<br>
+                    メール通知、システム内通知、Slack連携など、複数の通知方法を組み合わせて設定可能です。
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">
+                    <span>📬</span> 承認依頼通知
+                </div>
+                <div class="section-description">
+                    申請が提出され、承認者に承認依頼が届いた時の通知設定
+                </div>
+                
+                <div class="notification-item">
+                    <div class="notification-header">
+                        <div class="notification-title">承認依頼通知を有効にする</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="notification-options">
+                        <div class="option-group">
+                            <span class="option-label">通知方法</span>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="email1" checked>
+                                    <label for="email1">📧 メール通知</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="system1" checked>
+                                    <label for="system1">🔔 システム内通知</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="slack1">
+                                    <label for="slack1">💬 Slack通知</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="option-group">
+                            <span class="option-label">通知タイミング</span>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="instant1" checked>
+                                    <label for="instant1">即時通知</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="daily1">
+                                    <label for="daily1">1日1回まとめて通知</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 16px;">
+                        <label class="option-label">メール件名テンプレート</label>
+                        <input type="text" class="form-input" value="【CLAUDE SUITE】承認依頼：{申請タイトル}" placeholder="メール件名">
+                        <div class="form-description">変数: {申請番号} {申請タイトル} {申請者} {申請日}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">
+                    <span>✅</span> 承認完了通知
+                </div>
+                <div class="section-description">
+                    申請が承認された時に申請者へ送信される通知設定
+                </div>
+                
+                <div class="notification-item">
+                    <div class="notification-header">
+                        <div class="notification-title">承認完了通知を有効にする</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="notification-options">
+                        <div class="option-group">
+                            <span class="option-label">通知方法</span>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="email2" checked>
+                                    <label for="email2">📧 メール通知</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="system2" checked>
+                                    <label for="system2">🔔 システム内通知</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="slack2" checked>
+                                    <label for="slack2">💬 Slack通知</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="option-group">
+                            <span class="option-label">通知先</span>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="applicant2" checked>
+                                    <label for="applicant2">申請者</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="approver2">
+                                    <label for="approver2">全承認者</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="observer2">
+                                    <label for="observer2">参照者</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 16px;">
+                        <label class="option-label">メール件名テンプレート</label>
+                        <input type="text" class="form-input" value="【CLAUDE SUITE】承認完了：{申請タイトル}" placeholder="メール件名">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">
+                    <span>↩️</span> 差戻し通知
+                </div>
+                <div class="section-description">
+                    申請が差戻された時に申請者へ送信される通知設定
+                </div>
+                
+                <div class="notification-item">
+                    <div class="notification-header">
+                        <div class="notification-title">差戻し通知を有効にする</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="notification-options">
+                        <div class="option-group">
+                            <span class="option-label">通知方法</span>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="email3" checked>
+                                    <label for="email3">📧 メール通知</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="system3" checked>
+                                    <label for="system3">🔔 システム内通知</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="slack3" checked>
+                                    <label for="slack3">💬 Slack通知</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="option-group">
+                            <span class="option-label">優先度</span>
+                            <select class="form-select">
+                                <option selected>高（即時通知）</option>
+                                <option>普通</option>
+                                <option>低</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 16px;">
+                        <label class="option-label">メール件名テンプレート</label>
+                        <input type="text" class="form-input" value="【CLAUDE SUITE】差戻し：{申請タイトル}" placeholder="メール件名">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">
+                    <span>⏰</span> リマインダー通知
+                </div>
+                <div class="section-description">
+                    承認期限が近づいた時や、承認が滞っている時の通知設定
+                </div>
+                
+                <div class="notification-item">
+                    <div class="notification-header">
+                        <div class="notification-title">リマインダー通知を有効にする</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="notification-options">
+                        <div class="option-group">
+                            <span class="option-label">通知方法</span>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="email4" checked>
+                                    <label for="email4">📧 メール通知</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="system4" checked>
+                                    <label for="system4">🔔 システム内通知</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="option-group">
+                            <span class="option-label">リマインド間隔</span>
+                            <select class="form-select">
+                                <option>24時間後</option>
+                                <option selected>48時間後</option>
+                                <option>72時間後</option>
+                                <option>1週間後</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 16px;">
+                        <label class="option-label">メール件名テンプレート</label>
+                        <input type="text" class="form-input" value="【CLAUDE SUITE】リマインド：{申請タイトル}の承認をお願いします" placeholder="メール件名">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">
+                    <span>❌</span> 却下通知
+                </div>
+                <div class="section-description">
+                    申請が却下された時に申請者へ送信される通知設定
+                </div>
+                
+                <div class="notification-item">
+                    <div class="notification-header">
+                        <div class="notification-title">却下通知を有効にする</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="notification-options">
+                        <div class="option-group">
+                            <span class="option-label">通知方法</span>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="email5" checked>
+                                    <label for="email5">📧 メール通知</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="system5" checked>
+                                    <label for="system5">🔔 システム内通知</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="option-group">
+                            <span class="option-label">通知先</span>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="applicant5" checked>
+                                    <label for="applicant5">申請者</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="manager5" checked>
+                                    <label for="manager5">申請者の上長</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">
+                    <span>⚙️</span> 外部連携設定
+                </div>
+                <div class="section-description">
+                    Slack、Teams、Chatworkなど外部サービスとの連携設定
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <label class="option-label">Slack Webhook URL</label>
+                    <input type="text" class="form-input" placeholder="https://hooks.slack.com/services/..." value="https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXX">
+                    <div class="form-description">Slackの「Incoming Webhooks」から取得したURLを入力してください</div>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <label class="option-label">通知チャンネル</label>
+                    <input type="text" class="form-input" placeholder="#workflow-notifications" value="#workflow">
+                    <div class="form-description">通知を送信するSlackチャンネルを指定してください</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 32px;">
+                <button class="btn-primary" style="padding: 12px 48px;">💾 保存</button>
+                <a href="demo_workflow.html" class="btn-secondary" style="padding: 12px 32px; text-decoration: none;">キャンセル</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

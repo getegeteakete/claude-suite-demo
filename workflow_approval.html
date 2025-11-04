@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAUDE SUITE - 承認処理</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; max-width: 1200px; margin: 0 auto; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .page-title { font-size: 24px; font-weight: 600; color: #2c3e50; }
+        .breadcrumb { font-size: 13px; color: #7f8c8d; margin-bottom: 10px; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .btn-approve { background: #27ae60; color: white; border: none; padding: 12px 32px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+        .btn-approve:hover { background: #229954; }
+        .btn-reject { background: #e74c3c; color: white; border: none; padding: 12px 32px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-left: 10px; }
+        .btn-reject:hover { background: #c0392b; }
+        .btn-secondary { background: #95a5a6; color: white; border: none; padding: 12px 32px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-left: 10px; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; letter-spacing: 0.3px; }
+        .alert-warning { background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 3px; padding: 16px; margin-bottom: 20px; color: #856404; display: flex; align-items: center; gap: 12px; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 3px; font-size: 12px; font-weight: 600; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-approved { background: #d5f4e6; color: #1e7e34; }
+        .status-rejected { background: #fee; color: #991b1b; }
+        .section-card { background: white; border-radius: 3px; border: 1px solid #e1e8ed; padding: 28px; margin-bottom: 20px; }
+        .section-title { font-size: 18px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #e1e8ed; }
+        .info-row { display: grid; grid-template-columns: 200px 1fr; gap: 16px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #f1f3f5; }
+        .info-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .info-label { font-size: 13px; color: #7f8c8d; font-weight: 600; }
+        .info-value { font-size: 14px; color: #2c3e50; }
+        .info-value-large { font-size: 20px; font-weight: 600; color: #2c3e50; }
+        .priority-high { color: #e74c3c; font-weight: 600; }
+        .timeline { position: relative; padding-left: 40px; }
+        .timeline-item { position: relative; padding-bottom: 28px; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-item::before { content: ''; position: absolute; left: -29px; top: 8px; width: 18px; height: 18px; border-radius: 50%; background: #e1e8ed; border: 3px solid white; box-shadow: 0 0 0 2px #e1e8ed; }
+        .timeline-item.active::before { background: #3498db; box-shadow: 0 0 0 2px #3498db; }
+        .timeline-item.completed::before { background: #27ae60; box-shadow: 0 0 0 2px #27ae60; }
+        .timeline-item.rejected::before { background: #e74c3c; box-shadow: 0 0 0 2px #e74c3c; }
+        .timeline-item::after { content: ''; position: absolute; left: -21px; top: 26px; width: 2px; height: calc(100% - 18px); background: #e1e8ed; }
+        .timeline-item:last-child::after { display: none; }
+        .timeline-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px; }
+        .timeline-title { font-size: 14px; font-weight: 600; color: #2c3e50; }
+        .timeline-time { font-size: 12px; color: #7f8c8d; }
+        .timeline-content { font-size: 13px; color: #7f8c8d; }
+        .timeline-user { font-size: 13px; color: #2c3e50; margin-top: 4px; }
+        .comment-box { background: #f8f9fa; border: 1px solid #e1e8ed; border-radius: 3px; padding: 16px; margin-top: 12px; }
+        .comment-text { font-size: 13px; color: #2c3e50; line-height: 1.6; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 14px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
+        .form-textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 120px; }
+        .attachment-list { display: flex; flex-direction: column; gap: 8px; }
+        .attachment-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f8f9fa; border: 1px solid #e1e8ed; border-radius: 3px; }
+        .attachment-icon { font-size: 24px; }
+        .attachment-info { flex: 1; }
+        .attachment-name { font-size: 13px; font-weight: 600; color: #2c3e50; }
+        .attachment-size { font-size: 12px; color: #7f8c8d; }
+        .attachment-download { background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 3px; font-size: 12px; cursor: pointer; text-decoration: none; }
+        .attachment-download:hover { background: #2980b9; }
+        
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .main-content { padding: 20px; }
+            .info-row { grid-template-columns: 1fr; gap: 8px; }
+            .page-header { flex-direction: column; gap: 16px; align-items: stretch; }
+            .btn-approve, .btn-reject, .btn-secondary { width: 100%; margin-left: 0; margin-top: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📊</span><span>ダッシュボード</span></div></a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">👥</span><span>顧客管理</span></div></a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">💼</span><span>商談・案件管理</span></div></a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📅</span><span>予約・スケジュール</span></div></a>
+            <a href="demo_invoices.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📄</span><span>請求書管理</span></div></a>
+            <a href="demo_workflow.html" style="text-decoration: none; color: inherit;"><div class="menu-item active"><span class="menu-icon">🔄</span><span>ワークフロー</span></div></a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📈</span><span>分析レポート</span></div></a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">🤖</span><span>AI自動応答<span class="ai-badge">AI</span></span></div></a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">⚙️</span><span>設定</span></div></a>
+        </div>
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="demo_workflow.html">ワークフロー管理</a> / 承認処理
+            </div>
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">承認処理</h1>
+                    <div style="margin-top: 8px;">
+                        <span class="status-badge status-pending">承認待ち</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-warning">
+                <span style="font-size: 20px;">⚠️</span>
+                <div>
+                    <strong>あなたの承認が必要です</strong><br>
+                    この申請は部長としての承認を待っています。内容を確認して承認または差戻しを行ってください。
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">申請内容</div>
+                <div class="info-row">
+                    <div class="info-label">申請番号</div>
+                    <div class="info-value"><strong>WF-2025-0234</strong></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">申請種別</div>
+                    <div class="info-value">稟議申請</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">申請タイトル</div>
+                    <div class="info-value"><strong>新規サーバー購入申請</strong></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">申請者</div>
+                    <div class="info-value">田中 太郎（システム部 / 課長）</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">申請日時</div>
+                    <div class="info-value">2025年11月4日 09:30</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">優先度</div>
+                    <div class="info-value"><span class="priority-high">高</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">申請金額</div>
+                    <div class="info-value-large" style="color: #e74c3c;">¥3,500,000</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">詳細内容</div>
+                <div class="info-row">
+                    <div class="info-label">カテゴリ</div>
+                    <div class="info-value">設備投資</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">希望実施日</div>
+                    <div class="info-value">2025年11月30日</div>
+                </div>
+                <div class="info-row" style="border: none;">
+                    <div class="info-label">申請内容詳細</div>
+                    <div class="info-value">
+                        <div style="line-height: 1.8;">
+                            現在使用中のサーバーが老朽化しており、パフォーマンスの低下と保守期限切れが近づいているため、新規サーバーの購入を申請いたします。<br><br>
+                            
+                            <strong>【購入予定機器】</strong><br>
+                            ・サーバー本体: Dell PowerEdge R750 × 2台<br>
+                            ・ストレージ: Dell EMC Unity XT 480<br>
+                            ・ネットワーク機器: Cisco Catalyst 9300 スイッチ<br><br>
+                            
+                            <strong>【導入効果】</strong><br>
+                            ・処理速度が現行の3倍に向上<br>
+                            ・ストレージ容量が2倍に拡大<br>
+                            ・電力消費量が30%削減<br>
+                            ・保守費用が年間50万円削減<br><br>
+                            
+                            <strong>【投資回収期間】</strong><br>
+                            約3年（保守費削減と業務効率化による）
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">添付ファイル</div>
+                <div class="attachment-list">
+                    <div class="attachment-item">
+                        <span class="attachment-icon">📄</span>
+                        <div class="attachment-info">
+                            <div class="attachment-name">見積書_サーバー購入.pdf</div>
+                            <div class="attachment-size">1.2 MB</div>
+                        </div>
+                        <a href="#" class="attachment-download">ダウンロード</a>
+                    </div>
+                    <div class="attachment-item">
+                        <span class="attachment-icon">📊</span>
+                        <div class="attachment-info">
+                            <div class="attachment-name">費用対効果分析.xlsx</div>
+                            <div class="attachment-size">856 KB</div>
+                        </div>
+                        <a href="#" class="attachment-download">ダウンロード</a>
+                    </div>
+                    <div class="attachment-item">
+                        <span class="attachment-icon">📄</span>
+                        <div class="attachment-info">
+                            <div class="attachment-name">現行システム問題点まとめ.pdf</div>
+                            <div class="attachment-size">542 KB</div>
+                        </div>
+                        <a href="#" class="attachment-download">ダウンロード</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">承認履歴・フロー</div>
+                <div class="timeline">
+                    <div class="timeline-item completed">
+                        <div class="timeline-header">
+                            <div class="timeline-title">申請提出</div>
+                            <div class="timeline-time">2025/11/04 09:30</div>
+                        </div>
+                        <div class="timeline-user">👤 田中 太郎（システム部 課長）</div>
+                        <div class="comment-box">
+                            <div class="comment-text">
+                                新規サーバー購入の稟議を申請いたします。現行サーバーの老朽化対応のため、早急な対応をお願いいたします。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item completed">
+                        <div class="timeline-header">
+                            <div class="timeline-title">第一承認（システム部 部長代理）</div>
+                            <div class="timeline-time">2025/11/04 10:15</div>
+                        </div>
+                        <div class="timeline-user">👤 佐藤 次郎（システム部 部長代理）</div>
+                        <div class="timeline-content">✅ 承認されました</div>
+                        <div class="comment-box">
+                            <div class="comment-text">
+                                内容を確認しました。現行システムの問題点と導入効果が明確に示されており、承認いたします。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item active">
+                        <div class="timeline-header">
+                            <div class="timeline-title">第二承認（部長承認）</div>
+                            <div class="timeline-time">承認待ち</div>
+                        </div>
+                        <div class="timeline-user">👤 園田 真悠（システム部 部長）</div>
+                        <div class="timeline-content" style="color: #f39c12; font-weight: 600;">⏳ あなたの承認待ちです</div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-header">
+                            <div class="timeline-title">最終承認（役員承認）</div>
+                            <div class="timeline-time">未処理</div>
+                        </div>
+                        <div class="timeline-user">👤 山田 一郎（取締役）</div>
+                        <div class="timeline-content">500万円以上のため役員承認が必要です</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">承認処理</div>
+                <div class="form-group">
+                    <label class="form-label">コメント</label>
+                    <textarea class="form-textarea" placeholder="承認または差戻しの理由、コメントを入力してください（任意）"></textarea>
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: center; margin-top: 28px; flex-wrap: wrap;">
+                    <button class="btn-approve">✅ 承認する</button>
+                    <button class="btn-reject">↩️ 差戻し</button>
+                    <button class="btn-secondary">❌ 却下</button>
+                    <a href="demo_workflow.html" class="btn-secondary" style="text-decoration: none; display: inline-block;">← 一覧に戻る</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

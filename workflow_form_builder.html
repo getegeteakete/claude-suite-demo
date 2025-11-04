@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAUDE SUITE - 申請フォーム作成</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; display: grid; grid-template-columns: 1fr 400px; gap: 20px; }
+        .builder-section { }
+        .preview-section { }
+        .page-header { margin-bottom: 28px; }
+        .page-title { font-size: 24px; font-weight: 600; color: #2c3e50; }
+        .breadcrumb { font-size: 13px; color: #7f8c8d; margin-bottom: 10px; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .btn-primary { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-block; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-secondary { background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-left: 10px; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; letter-spacing: 0.3px; }
+        .section-card { background: white; border-radius: 3px; border: 1px solid #e1e8ed; padding: 24px; margin-bottom: 20px; }
+        .section-title { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e1e8ed; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .form-select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .form-description { font-size: 12px; color: #7f8c8d; margin-top: 5px; }
+        .field-palette { background: white; border-radius: 3px; border: 1px solid #e1e8ed; padding: 20px; margin-bottom: 20px; }
+        .palette-title { font-size: 14px; font-weight: 600; color: #2c3e50; margin-bottom: 12px; }
+        .field-item { padding: 12px; border: 1px solid #e1e8ed; border-radius: 3px; margin-bottom: 8px; cursor: move; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
+        .field-item:hover { background: #f8f9fa; border-color: #3498db; }
+        .field-icon { font-size: 16px; }
+        .field-info { flex: 1; }
+        .field-name { font-size: 13px; font-weight: 600; color: #2c3e50; }
+        .field-desc { font-size: 11px; color: #7f8c8d; }
+        .form-builder { background: white; border-radius: 3px; border: 1px solid #e1e8ed; padding: 24px; min-height: 400px; }
+        .builder-field { background: #f8f9fa; border: 2px solid #e1e8ed; border-radius: 3px; padding: 16px; margin-bottom: 12px; cursor: move; transition: all 0.2s; }
+        .builder-field:hover { border-color: #3498db; }
+        .builder-field-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .builder-field-label { font-size: 14px; font-weight: 600; color: #2c3e50; }
+        .builder-field-actions { display: flex; gap: 6px; }
+        .action-btn-small { background: white; border: 1px solid #ddd; padding: 4px 8px; border-radius: 3px; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+        .action-btn-small:hover { background: #f8f9fa; border-color: #3498db; }
+        .required-badge { background: #e74c3c; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; }
+        .preview-card { background: white; border-radius: 3px; border: 1px solid #e1e8ed; padding: 24px; position: sticky; top: 20px; }
+        .preview-title { font-size: 14px; font-weight: 600; color: #2c3e50; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e1e8ed; }
+        .drop-zone { border: 2px dashed #ddd; border-radius: 3px; padding: 40px 20px; text-align: center; color: #95a5a6; font-size: 13px; margin-bottom: 12px; }
+        .drop-zone.active { border-color: #3498db; background: #ecf7fd; color: #3498db; }
+        
+        @media (max-width: 1024px) {
+            .main-content { grid-template-columns: 1fr; }
+            .preview-card { position: relative; top: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .main-content { padding: 20px; grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📊</span><span>ダッシュボード</span></div></a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">👥</span><span>顧客管理</span></div></a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">💼</span><span>商談・案件管理</span></div></a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📅</span><span>予約・スケジュール</span></div></a>
+            <a href="demo_invoices.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📄</span><span>請求書管理</span></div></a>
+            <a href="demo_workflow.html" style="text-decoration: none; color: inherit;"><div class="menu-item active"><span class="menu-icon">🔄</span><span>ワークフロー</span></div></a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📈</span><span>分析レポート</span></div></a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">🤖</span><span>AI自動応答<span class="ai-badge">AI</span></span></div></a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">⚙️</span><span>設定</span></div></a>
+        </div>
+        <div class="main-content">
+            <div class="builder-section">
+                <div class="breadcrumb">
+                    <a href="demo_workflow.html">ワークフロー管理</a> / 申請フォーム作成
+                </div>
+                <div class="page-header">
+                    <h1 class="page-title">申請フォーム作成・編集</h1>
+                    <div style="margin-top: 12px;">
+                        <button class="btn-primary">💾 保存</button>
+                        <button class="btn-secondary">キャンセル</button>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-title">フォーム基本情報</div>
+                    <div class="form-group">
+                        <label class="form-label">フォーム名 *</label>
+                        <input type="text" class="form-input" value="稟議申請フォーム" placeholder="フォーム名を入力">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">申請種別 *</label>
+                        <select class="form-select">
+                            <option selected>稟議申請</option>
+                            <option>経費精算</option>
+                            <option>休暇申請</option>
+                            <option>購買申請</option>
+                            <option>契約承認</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">説明</label>
+                        <input type="text" class="form-input" value="設備投資や予算承認などの稟議申請用フォーム" placeholder="フォームの説明を入力">
+                    </div>
+                </div>
+
+                <div class="field-palette">
+                    <div class="palette-title">📦 フィールドパレット</div>
+                    <div class="form-description" style="margin-bottom: 12px;">
+                        ドラッグ＆ドロップでフォームに追加できます
+                    </div>
+                    
+                    <div class="field-item">
+                        <span class="field-icon">📝</span>
+                        <div class="field-info">
+                            <div class="field-name">テキスト入力</div>
+                            <div class="field-desc">1行のテキスト入力欄</div>
+                        </div>
+                    </div>
+                    
+                    <div class="field-item">
+                        <span class="field-icon">📄</span>
+                        <div class="field-info">
+                            <div class="field-name">複数行テキスト</div>
+                            <div class="field-desc">長文の入力欄</div>
+                        </div>
+                    </div>
+                    
+                    <div class="field-item">
+                        <span class="field-icon">🔢</span>
+                        <div class="field-info">
+                            <div class="field-name">数値入力</div>
+                            <div class="field-desc">数値のみの入力欄</div>
+                        </div>
+                    </div>
+                    
+                    <div class="field-item">
+                        <span class="field-icon">📅</span>
+                        <div class="field-info">
+                            <div class="field-name">日付選択</div>
+                            <div class="field-desc">カレンダーから日付を選択</div>
+                        </div>
+                    </div>
+                    
+                    <div class="field-item">
+                        <span class="field-icon">✅</span>
+                        <div class="field-info">
+                            <div class="field-name">選択肢（単一）</div>
+                            <div class="field-desc">ラジオボタンまたはドロップダウン</div>
+                        </div>
+                    </div>
+                    
+                    <div class="field-item">
+                        <span class="field-icon">☑️</span>
+                        <div class="field-info">
+                            <div class="field-name">選択肢（複数）</div>
+                            <div class="field-desc">チェックボックス</div>
+                        </div>
+                    </div>
+                    
+                    <div class="field-item">
+                        <span class="field-icon">📎</span>
+                        <div class="field-info">
+                            <div class="field-name">ファイル添付</div>
+                            <div class="field-desc">ファイルのアップロード</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div class="preview-card">
+                    <div class="preview-title">📋 フォームプレビュー</div>
+                    
+                    <div class="form-builder">
+                        <div class="builder-field">
+                            <div class="builder-field-header">
+                                <div>
+                                    <span class="builder-field-label">申請タイトル</span>
+                                    <span class="required-badge">必須</span>
+                                </div>
+                                <div class="builder-field-actions">
+                                    <button class="action-btn-small">⚙️</button>
+                                    <button class="action-btn-small">🗑️</button>
+                                </div>
+                            </div>
+                            <input type="text" class="form-input" placeholder="申請タイトルを入力" disabled>
+                        </div>
+
+                        <div class="builder-field">
+                            <div class="builder-field-header">
+                                <div>
+                                    <span class="builder-field-label">申請内容</span>
+                                    <span class="required-badge">必須</span>
+                                </div>
+                                <div class="builder-field-actions">
+                                    <button class="action-btn-small">⚙️</button>
+                                    <button class="action-btn-small">🗑️</button>
+                                </div>
+                            </div>
+                            <textarea class="form-input" rows="4" placeholder="申請内容の詳細を入力" disabled></textarea>
+                        </div>
+
+                        <div class="builder-field">
+                            <div class="builder-field-header">
+                                <div>
+                                    <span class="builder-field-label">申請金額</span>
+                                    <span class="required-badge">必須</span>
+                                </div>
+                                <div class="builder-field-actions">
+                                    <button class="action-btn-small">⚙️</button>
+                                    <button class="action-btn-small">🗑️</button>
+                                </div>
+                            </div>
+                            <input type="number" class="form-input" placeholder="金額を入力（円）" disabled>
+                        </div>
+
+                        <div class="builder-field">
+                            <div class="builder-field-header">
+                                <div>
+                                    <span class="builder-field-label">希望実施日</span>
+                                </div>
+                                <div class="builder-field-actions">
+                                    <button class="action-btn-small">⚙️</button>
+                                    <button class="action-btn-small">🗑️</button>
+                                </div>
+                            </div>
+                            <input type="date" class="form-input" disabled>
+                        </div>
+
+                        <div class="builder-field">
+                            <div class="builder-field-header">
+                                <div>
+                                    <span class="builder-field-label">カテゴリ</span>
+                                    <span class="required-badge">必須</span>
+                                </div>
+                                <div class="builder-field-actions">
+                                    <button class="action-btn-small">⚙️</button>
+                                    <button class="action-btn-small">🗑️</button>
+                                </div>
+                            </div>
+                            <select class="form-select" disabled>
+                                <option>設備投資</option>
+                                <option>人件費</option>
+                                <option>マーケティング費用</option>
+                                <option>その他</option>
+                            </select>
+                        </div>
+
+                        <div class="builder-field">
+                            <div class="builder-field-header">
+                                <div>
+                                    <span class="builder-field-label">添付ファイル</span>
+                                </div>
+                                <div class="builder-field-actions">
+                                    <button class="action-btn-small">⚙️</button>
+                                    <button class="action-btn-small">🗑️</button>
+                                </div>
+                            </div>
+                            <input type="file" class="form-input" disabled>
+                            <div class="form-description">見積書、企画書などを添付してください</div>
+                        </div>
+
+                        <div class="drop-zone">
+                            ここにフィールドをドロップ
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <button class="btn-primary" style="width: 100%;">💾 フォームを保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAUDE SUITE - 承認ルート設定</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .page-title { font-size: 24px; font-weight: 600; color: #2c3e50; }
+        .breadcrumb { font-size: 13px; color: #7f8c8d; margin-bottom: 10px; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .btn-primary { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-block; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-secondary { background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-left: 10px; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; letter-spacing: 0.3px; }
+        .section-card { background: white; border-radius: 3px; border: 1px solid #e1e8ed; padding: 24px; margin-bottom: 20px; }
+        .section-title { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e1e8ed; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .form-select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 3px; font-size: 14px; }
+        .form-description { font-size: 12px; color: #7f8c8d; margin-top: 5px; }
+        .route-list { background: white; border-radius: 3px; border: 1px solid #e1e8ed; margin-bottom: 20px; }
+        .route-item { padding: 20px; border-bottom: 1px solid #f1f3f5; display: flex; align-items: center; gap: 16px; }
+        .route-item:last-child { border-bottom: none; }
+        .route-item:hover { background: #f8f9fa; }
+        .route-number { width: 40px; height: 40px; border-radius: 50%; background: #3498db; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; }
+        .route-info { flex: 1; }
+        .route-title { font-size: 15px; font-weight: 600; color: #2c3e50; margin-bottom: 4px; }
+        .route-detail { font-size: 13px; color: #7f8c8d; }
+        .route-actions { display: flex; gap: 8px; }
+        .action-btn { background: #f1f3f5; border: none; padding: 6px 12px; border-radius: 3px; font-size: 12px; cursor: pointer; transition: background 0.2s; color: #2c3e50; }
+        .action-btn:hover { background: #e1e8ed; }
+        .action-btn-danger { background: #fee; color: #991b1b; }
+        .action-btn-danger:hover { background: #fdd; }
+        .add-route-btn { width: 100%; padding: 16px; border: 2px dashed #ddd; background: white; border-radius: 3px; color: #7f8c8d; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+        .add-route-btn:hover { border-color: #3498db; color: #3498db; background: #f8f9fa; }
+        .condition-group { background: #f8f9fa; padding: 16px; border-radius: 3px; margin-top: 12px; }
+        .condition-title { font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 12px; }
+        .condition-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; margin-bottom: 10px; align-items: end; }
+        .btn-small { padding: 10px 12px; font-size: 12px; }
+        .flow-diagram { background: white; border: 1px solid #e1e8ed; border-radius: 3px; padding: 32px; margin-bottom: 20px; text-align: center; }
+        .flow-step { display: inline-block; background: #ecf0f1; padding: 16px 24px; border-radius: 3px; margin: 8px; min-width: 150px; }
+        .flow-step-active { background: #3498db; color: white; }
+        .flow-arrow { display: inline-block; margin: 0 8px; color: #95a5a6; font-size: 20px; }
+        
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #34495e; padding: 16px 0; }
+            .main-content { padding: 20px; }
+            .condition-row { grid-template-columns: 1fr; }
+            .route-item { flex-direction: column; align-items: start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
+        </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📊</span><span>ダッシュボード</span></div></a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">👥</span><span>顧客管理</span></div></a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">💼</span><span>商談・案件管理</span></div></a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📅</span><span>予約・スケジュール</span></div></a>
+            <a href="demo_invoices.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📄</span><span>請求書管理</span></div></a>
+            <a href="demo_workflow.html" style="text-decoration: none; color: inherit;"><div class="menu-item active"><span class="menu-icon">🔄</span><span>ワークフロー</span></div></a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📈</span><span>分析レポート</span></div></a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">🤖</span><span>AI自動応答<span class="ai-badge">AI</span></span></div></a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">⚙️</span><span>設定</span></div></a>
+        </div>
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="demo_workflow.html">ワークフロー管理</a> / 承認ルート設定
+            </div>
+            <div class="page-header">
+                <h1 class="page-title">承認ルート設定</h1>
+                <div>
+                    <button class="btn-primary">💾 保存</button>
+                    <button class="btn-secondary">キャンセル</button>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">基本情報</div>
+                <div class="form-group">
+                    <label class="form-label">ルート名 *</label>
+                    <input type="text" class="form-input" value="稟議申請（標準ルート）" placeholder="承認ルート名を入力">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">申請種別 *</label>
+                    <select class="form-select">
+                        <option selected>稟議申請</option>
+                        <option>経費精算</option>
+                        <option>休暇申請</option>
+                        <option>購買申請</option>
+                        <option>契約承認</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">説明</label>
+                    <input type="text" class="form-input" value="金額に応じた段階的承認フロー" placeholder="このルートの説明を入力">
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">承認フロー図</div>
+                <div class="flow-diagram">
+                    <div class="flow-step flow-step-active">申請者</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">第一承認者<br><small>（課長）</small></div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">第二承認者<br><small>（部長）</small></div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">最終承認者<br><small>（役員）</small></div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">完了</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">承認ステップ設定</div>
+                <div class="route-list">
+                    <div class="route-item">
+                        <div class="route-number">1</div>
+                        <div class="route-info">
+                            <div class="route-title">第一承認者（課長）</div>
+                            <div class="route-detail">役職: 課長 / 承認権限: 100万円まで / 必須承認</div>
+                        </div>
+                        <div class="route-actions">
+                            <button class="action-btn">✏️ 編集</button>
+                            <button class="action-btn action-btn-danger">🗑️ 削除</button>
+                        </div>
+                    </div>
+                    <div class="route-item">
+                        <div class="route-number">2</div>
+                        <div class="route-info">
+                            <div class="route-title">第二承認者（部長）</div>
+                            <div class="route-detail">役職: 部長 / 承認権限: 500万円まで / 必須承認</div>
+                        </div>
+                        <div class="route-actions">
+                            <button class="action-btn">✏️ 編集</button>
+                            <button class="action-btn action-btn-danger">🗑️ 削除</button>
+                        </div>
+                    </div>
+                    <div class="route-item">
+                        <div class="route-number">3</div>
+                        <div class="route-info">
+                            <div class="route-title">最終承認者（役員）</div>
+                            <div class="route-detail">役職: 役員 / 承認権限: 無制限 / 条件付き承認（500万円以上）</div>
+                        </div>
+                        <div class="route-actions">
+                            <button class="action-btn">✏️ 編集</button>
+                            <button class="action-btn action-btn-danger">🗑️ 削除</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-route-btn">+ 承認ステップを追加</button>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">条件分岐設定</div>
+                <div class="form-description" style="margin-bottom: 16px;">
+                    金額や内容に応じて承認ルートを自動的に変更します
+                </div>
+                
+                <div class="condition-group">
+                    <div class="condition-title">条件1: 金額による分岐</div>
+                    <div class="condition-row">
+                        <div class="form-group" style="margin: 0;">
+                            <label class="form-label">条件</label>
+                            <select class="form-select">
+                                <option>申請金額</option>
+                                <option>契約期間</option>
+                                <option>申請部署</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label class="form-label">演算子</label>
+                            <select class="form-select">
+                                <option>以上</option>
+                                <option>以下</option>
+                                <option>等しい</option>
+                                <option>含む</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label class="form-label">値</label>
+                            <input type="text" class="form-input" value="500万円" placeholder="条件値を入力">
+                        </div>
+                        <button class="action-btn action-btn-danger btn-small">削除</button>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">アクション</label>
+                        <select class="form-select">
+                            <option>役員承認を追加</option>
+                            <option>承認をスキップ</option>
+                            <option>別ルートに変更</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="condition-group">
+                    <div class="condition-title">条件2: 部署による分岐</div>
+                    <div class="condition-row">
+                        <div class="form-group" style="margin: 0;">
+                            <label class="form-label">条件</label>
+                            <select class="form-select">
+                                <option>申請部署</option>
+                                <option>申請金額</option>
+                                <option>契約期間</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label class="form-label">演算子</label>
+                            <select class="form-select">
+                                <option>等しい</option>
+                                <option>含む</option>
+                                <option>以上</option>
+                                <option>以下</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label class="form-label">値</label>
+                            <input type="text" class="form-input" value="営業部" placeholder="条件値を入力">
+                        </div>
+                        <button class="action-btn action-btn-danger btn-small">削除</button>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">アクション</label>
+                        <select class="form-select">
+                            <option>営業部長の承認を追加</option>
+                            <option>承認をスキップ</option>
+                            <option>別ルートに変更</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="add-route-btn" style="margin-top: 12px;">+ 条件分岐を追加</button>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">その他の設定</div>
+                <div class="form-group">
+                    <label class="form-label">差戻し設定</label>
+                    <select class="form-select">
+                        <option>申請者に差戻し可能</option>
+                        <option>前の承認者に差戻し可能</option>
+                        <option>差戻し不可</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">代理承認設定</label>
+                    <select class="form-select">
+                        <option>代理承認を許可</option>
+                        <option>代理承認を禁止</option>
+                    </select>
+                    <div class="form-description">承認者が不在時に代理者が承認できるようにします</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">自動承認期限</label>
+                    <input type="number" class="form-input" value="3" placeholder="日数を入力">
+                    <div class="form-description">指定日数が経過すると自動的に承認されます（空欄で無効）</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 32px;">
+                <button class="btn-primary" style="padding: 12px 48px;">💾 保存</button>
+                <a href="demo_workflow.html" class="btn-secondary" style="padding: 12px 32px; text-decoration: none;">キャンセル</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
