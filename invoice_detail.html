@@ -3,235 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>適格請求書 - INV-2025-0187</title>
+    <title>CLAUDE SUITE - 適格請求書詳細</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Yu Gothic', 'Hiragino Sans', 'MS PGothic', sans-serif; background: #f8f9fa; padding: 40px 20px; }
-        .invoice-container { max-width: 800px; margin: 0 auto; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .invoice-header { background: #2c3e50; color: white; padding: 30px 40px; }
-        .invoice-title { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
-        .invoice-number { font-size: 16px; opacity: 0.9; }
-        .invoice-body { padding: 40px; }
-        .info-section { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 2px solid #e1e8ed; }
-        .info-block { }
-        .info-label { font-size: 11px; color: #7f8c8d; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .info-content { font-size: 14px; color: #2c3e50; line-height: 1.8; }
-        .company-name { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: #2c3e50; }
-        .registration-number { background: #fff3cd; color: #856404; padding: 6px 12px; border-radius: 3px; font-size: 12px; font-weight: 600; display: inline-block; margin-top: 8px; }
-        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        .invoice-table th { background: #f8f9fa; padding: 12px; text-align: left; font-size: 12px; color: #7f8c8d; border-bottom: 2px solid #e1e8ed; font-weight: 600; }
-        .invoice-table td { padding: 12px; border-bottom: 1px solid #f1f3f5; font-size: 14px; color: #2c3e50; }
-        .invoice-table tr:last-child td { border-bottom: none; }
-        .text-right { text-align: right; }
-        .tax-rate { font-size: 12px; color: #7f8c8d; }
-        .summary-section { background: #f8f9fa; padding: 24px; border-radius: 3px; margin-bottom: 30px; }
-        .summary-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; }
-        .summary-row.subtotal { border-top: 1px solid #e1e8ed; padding-top: 16px; margin-top: 8px; }
-        .summary-row.total { border-top: 2px solid #2c3e50; padding-top: 16px; margin-top: 16px; font-size: 18px; font-weight: 600; color: #2c3e50; }
-        .summary-label { color: #7f8c8d; }
-        .summary-value { font-weight: 600; color: #2c3e50; }
-        .summary-row.total .summary-value { color: #3498db; font-size: 24px; }
-        .notes-section { margin-bottom: 30px; }
-        .notes-title { font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
-        .notes-content { font-size: 12px; color: #7f8c8d; line-height: 1.6; }
-        .footer-section { border-top: 2px solid #e1e8ed; padding-top: 20px; text-align: center; font-size: 12px; color: #95a5a6; }
-        .invoice-stamp { position: absolute; top: 50px; right: 50px; width: 120px; height: 120px; border: 3px solid #e74c3c; border-radius: 50%; display: flex; align-items: center; justify-content: center; transform: rotate(-15deg); opacity: 0.3; }
-        .stamp-text { font-size: 28px; font-weight: 700; color: #e74c3c; }
-        .action-buttons { text-align: center; margin: 30px 0; }
-        .btn { display: inline-block; padding: 12px 24px; margin: 0 8px; border-radius: 3px; font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer; border: none; transition: all 0.2s; }
-        .btn-primary { background: #3498db; color: white; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f8f9fa; color: #1a1a1a; }
+        .header { background: #2c3e50; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #34495e; }
+        .logo { display: flex; flex-direction: column; gap: 2px; }
+        .logo-title { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .logo-company { font-size: 11px; color: #bdc3c7; font-weight: 400; letter-spacing: 0.3px; }
+        .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 3px; background: #34495e; color: white; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; }
+        .container { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 240px; background: #2c3e50; padding: 24px 0; border-right: 1px solid #34495e; }
+        .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #bdc3c7; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #ecf0f1; }
+        .menu-item.active { background: rgba(255,255,255,0.08); color: #ffffff; border-left-color: #3498db; }
+        .menu-icon { font-size: 16px; width: 20px; text-align: center; }
+        .main-content { flex: 1; padding: 32px; background: #f8f9fa; }
+        .btn-back { background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-block; }
+        .btn-back:hover { background: #7f8c8d; }
+        .btn-primary { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-left: 10px; }
         .btn-primary:hover { background: #2980b9; }
-        .btn-secondary { background: white; color: #2c3e50; border: 1px solid #ddd; }
-        .btn-secondary:hover { background: #f8f9fa; }
+        .invoice-paper { background: white; max-width: 900px; margin: 20px auto; padding: 60px; border: 1px solid #e1e8ed; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .invoice-header { text-align: center; margin-bottom: 40px; border-bottom: 3px solid #2c3e50; padding-bottom: 20px; }
+        .invoice-title { font-size: 32px; font-weight: 700; color: #2c3e50; margin-bottom: 10px; }
+        .invoice-subtitle { font-size: 14px; color: #7f8c8d; background: #27ae60; color: white; padding: 5px 15px; border-radius: 3px; display: inline-block; }
+        .invoice-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px; }
+        .meta-section { }
+        .meta-title { font-size: 12px; color: #7f8c8d; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .meta-content { font-size: 14px; line-height: 1.8; }
+        .meta-large { font-size: 18px; font-weight: 700; color: #2c3e50; }
+        .registration-number { background: #fff3cd; padding: 8px 12px; border-left: 4px solid #f39c12; margin: 10px 0; font-weight: 600; font-size: 13px; }
+        .invoice-items { margin-bottom: 30px; }
+        .items-table { width: 100%; border-collapse: collapse; }
+        .items-table th { background: #f8f9fa; padding: 12px; text-align: left; font-size: 12px; font-weight: 600; color: #7f8c8d; border-bottom: 2px solid #e1e8ed; text-transform: uppercase; letter-spacing: 0.5px; }
+        .items-table td { padding: 12px; border-bottom: 1px solid #f1f3f5; font-size: 14px; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .invoice-summary { display: flex; justify-content: flex-end; margin-top: 20px; }
+        .summary-box { width: 400px; }
+        .summary-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; border-bottom: 1px solid #f1f3f5; }
+        .summary-row.total { border-top: 2px solid #2c3e50; border-bottom: 2px solid #2c3e50; font-size: 18px; font-weight: 700; color: #2c3e50; margin-top: 10px; padding: 15px 0; }
+        .tax-breakdown { background: #f8f9fa; padding: 15px; border-radius: 3px; margin: 20px 0; }
+        .tax-title { font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 10px; }
+        .tax-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; }
+        .invoice-notes { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e1e8ed; }
+        .notes-title { font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 10px; }
+        .notes-content { font-size: 13px; line-height: 1.8; color: #7f8c8d; }
+        .ai-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; letter-spacing: 0.3px; }
         @media print {
-            body { background: white; padding: 0; }
-            .action-buttons { display: none; }
-            .invoice-container { box-shadow: none; }
-        }
-        
-        /* レスポンシブ対応 */
-        @media (max-width: 768px) {
-            body { padding: 20px 10px; }
-            .invoice-container { box-shadow: 0 1px 5px rgba(0,0,0,0.1); }
-            .invoice-header { padding: 20px; }
-            .invoice-title { font-size: 22px; }
-            .invoice-body { padding: 20px; }
-            .info-section { grid-template-columns: 1fr; gap: 20px; }
-            .company-name { font-size: 16px; }
-            .invoice-table th, .invoice-table td { padding: 10px 8px; font-size: 12px; }
-            .summary-section { padding: 16px; }
-            .summary-row { font-size: 13px; }
-            .summary-row.total { font-size: 16px; }
-            .summary-row.total .summary-value { font-size: 20px; }
-            .action-buttons { flex-direction: column; }
-            .btn { width: 100%; margin: 5px 0; }
-        }
-        
-        @media (max-width: 480px) {
-            .invoice-title { font-size: 20px; }
-            .invoice-number { font-size: 14px; }
-            .info-content { font-size: 12px; }
-            .registration-number { font-size: 11px; padding: 4px 8px; }
+            .header, .sidebar, .btn-back, .btn-primary { display: none; }
+            .main-content { padding: 0; }
+            body { background: white; }
         }
     </style>
 </head>
 <body>
-    <div class="action-buttons">
-        <a href="demo_invoices.html" class="btn btn-secondary">← 請求一覧に戻る</a>
-        <button onclick="window.print()" class="btn btn-primary">🖨️ 印刷 / PDF保存</button>
-        <button class="btn btn-primary">📧 メール送信</button>
-    </div>
-    
-    <div class="invoice-container">
-        <div class="invoice-header">
-            <div class="invoice-title">適格請求書</div>
-            <div class="invoice-number">請求書番号: INV-2025-0187</div>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-title">CLAUDE SUITE</div>
+            <div class="logo-company">合同会社UMA</div>
         </div>
-        
-        <div class="invoice-body">
-            <div class="info-section">
-                <div class="info-block">
-                    <div class="info-label">請求先</div>
-                    <div class="company-name">
-                        <a href="customer_detail.html" style="color: #2c3e50; text-decoration: none;">株式会社ABC商事</a>
-                    </div>
-                    <div class="info-content">
-                        〒150-0001<br>
-                        東京都渋谷区渋谷2-1-1<br>
-                        ABCビル 5F<br>
-                        営業部 田中太郎 様
-                    </div>
-                </div>
-                
-                <div class="info-block">
-                    <div class="info-label">請求元</div>
-                    <div class="company-name">合同会社UMA</div>
-                    <div class="info-content">
-                        〒814-0002<br>
-                        福岡県福岡市早良区西新２丁目２３−１８<br>
-                        ファーネスト百道浜通り 701号<br>
-                        代表社員: SONODA MAYU<br>
-                        Email: t@uma-s.com
-                    </div>
-                    <div class="registration-number">
-                        📋 適格請求書発行事業者登録番号<br>
-                        T1234567890123
-                    </div>
-                </div>
-            </div>
-            
-            <div style="margin-bottom: 30px;">
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                    <div>
-                        <div class="info-label">請求日</div>
-                        <div style="font-size: 16px; font-weight: 600; color: #2c3e50;">2025年11月1日</div>
-                    </div>
-                    <div>
-                        <div class="info-label">お支払期限</div>
-                        <div style="font-size: 16px; font-weight: 600; color: #2c3e50;">2025年11月30日</div>
-                    </div>
-                    <div>
-                        <div class="info-label">請求金額</div>
-                        <div style="font-size: 22px; font-weight: 600; color: #3498db;">¥165,000</div>
-                    </div>
-                </div>
-            </div>
-            
-            <table class="invoice-table">
-                <thead>
-                    <tr>
-                        <th style="width: 50%;">商品・サービス名</th>
-                        <th class="text-right" style="width: 15%;">数量</th>
-                        <th class="text-right" style="width: 15%;">単価</th>
-                        <th class="text-right" style="width: 20%;">金額</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <strong>CLAUDE SUITE エンタープライズプラン</strong><br>
-                            <span class="tax-rate">※ 2025年11月分 月額利用料</span>
-                        </td>
-                        <td class="text-right">1</td>
-                        <td class="text-right">¥150,000</td>
-                        <td class="text-right"><strong>¥150,000</strong></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>初期導入サポート</strong><br>
-                            <span class="tax-rate">※ システム設定・データ移行支援</span>
-                        </td>
-                        <td class="text-right">1</td>
-                        <td class="text-right">¥0</td>
-                        <td class="text-right"><strong>¥0</strong></td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <div class="summary-section">
-                <div class="summary-row">
-                    <span class="summary-label">小計（税抜）</span>
-                    <span class="summary-value">¥150,000</span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">消費税（10%対象）</span>
-                    <span class="summary-value">¥150,000</span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">消費税額（10%）</span>
-                    <span class="summary-value">¥15,000</span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">軽減税率（8%対象）</span>
-                    <span class="summary-value">¥0</span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">消費税額（8%）</span>
-                    <span class="summary-value">¥0</span>
-                </div>
-                <div class="summary-row subtotal">
-                    <span class="summary-label">消費税合計</span>
-                    <span class="summary-value">¥15,000</span>
-                </div>
-                <div class="summary-row total">
-                    <span class="summary-label">税込合計金額</span>
-                    <span class="summary-value">¥165,000</span>
-                </div>
-            </div>
-            
-            <div class="notes-section">
-                <div class="notes-title">お支払い方法</div>
-                <div class="notes-content">
-                    下記口座にお振込みください。<br>
-                    <strong>銀行名:</strong> PayPay銀行<br>
-                    <strong>支店名:</strong> ビジネス営業部<br>
-                    <strong>口座種別:</strong> 普通<br>
-                    <strong>口座番号:</strong> 5804618<br>
-                    <strong>口座名義:</strong> ド）ユーマ<br>
-                    ※振込手数料はお客様負担でお願いいたします。
-                </div>
-            </div>
-            
-            <div class="notes-section">
-                <div class="notes-title">備考</div>
-                <div class="notes-content">
-                    本請求書は、適格請求書等保存方式（インボイス制度）に対応した適格請求書です。<br>
-                    ご不明点がございましたら、上記連絡先までお気軽にお問い合わせください。
-                </div>
-            </div>
-            
-            <div class="footer-section">
-                本書類は CLAUDE SUITE より自動生成されました。<br>
-                発行日時: 2025年11月1日 10:30<br>
-                合同会社UMA - クラウド型顧客管理AIシステム
-            </div>
+        <div class="user-info">
+            <span>SONODA MAYU</span>
+            <div class="user-avatar">S</div>
         </div>
     </div>
-    
-    <div class="action-buttons">
-        <a href="demo_invoices.html" class="btn btn-secondary">← 請求一覧に戻る</a>
-        <button onclick="window.print()" class="btn btn-primary">🖨️ 印刷 / PDF保存</button>
-        <button class="btn btn-primary">📧 メール送信</button>
+    <div class="container">
+        <div class="sidebar">
+            <a href="demo_dashboard.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📊</span><span>ダッシュボード</span></div></a>
+            <a href="demo_customer.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">👥</span><span>顧客管理</span></div></a>
+            <a href="demo_deals.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">💼</span><span>商談・案件管理</span></div></a>
+            <a href="demo_schedule.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📅</span><span>予約・スケジュール</span></div></a>
+            <a href="demo_invoices.html" style="text-decoration: none; color: inherit;"><div class="menu-item active"><span class="menu-icon">📄</span><span>請求書管理</span></div></a>
+            <a href="demo_workflow.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">🔄</span><span>ワークフロー</span></div></a>
+            <a href="demo_report.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">📈</span><span>分析レポート</span></div></a>
+            <a href="demo_ai_response.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">🤖</span><span>AI自動応答<span class="ai-badge">AI</span></span></div></a>
+            <a href="demo_settings.html" style="text-decoration: none; color: inherit;"><div class="menu-item"><span class="menu-icon">⚙️</span><span>設定</span></div></a>
+        </div>
+        <div class="main-content">
+            <div style="margin-bottom: 20px;">
+                <a href="demo_invoices.html" class="btn-back">← 請求書一覧に戻る</a>
+                <button class="btn-primary" onclick="window.print()">🖨️ 印刷 / PDF保存</button>
+                <button class="btn-primary">📧 メール送信</button>
+            </div>
+
+            <div class="invoice-paper">
+                <!-- 請求書ヘッダー -->
+                <div class="invoice-header">
+                    <div class="invoice-title">請求書</div>
+                    <div class="invoice-subtitle">適格請求書（インボイス制度対応）</div>
+                </div>
+
+                <!-- 請求書番号・日付 -->
+                <div style="text-align: right; margin-bottom: 30px;">
+                    <div style="font-size: 20px; font-weight: 700; color: #2c3e50; margin-bottom: 10px;">INV-2025-0187</div>
+                    <div style="font-size: 13px; color: #7f8c8d;">発行日: 2025年11月1日</div>
+                    <div style="font-size: 13px; color: #7f8c8d;">お支払期限: 2025年11月30日</div>
+                </div>
+
+                <!-- 請求先・請求元情報 -->
+                <div class="invoice-meta">
+                    <div class="meta-section">
+                        <div class="meta-title">請求先</div>
+                        <div class="meta-content">
+                            <div class="meta-large">株式会社ABC商事 御中</div>
+                            <div>〒100-0001</div>
+                            <div>東京都千代田区千代田1-1-1</div>
+                            <div>担当者: 田中 太郎 様</div>
+                            <div>TEL: 03-1234-5678</div>
+                        </div>
+                    </div>
+                    <div class="meta-section">
+                        <div class="meta-title">請求元</div>
+                        <div class="meta-content">
+                            <div style="font-weight: 700;">合同会社UMA</div>
+                            <div>〒150-0001</div>
+                            <div>東京都渋谷区神宮前1-1-1</div>
+                            <div>TEL: 03-9876-5432</div>
+                            <div>Email: info@uma-s.com</div>
+                        </div>
+                        <div class="registration-number">
+                            📋 登録番号: T1234567890123
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 取引年月日 -->
+                <div style="background: #e8f4f8; padding: 15px; border-left: 4px solid #3498db; margin-bottom: 30px;">
+                    <div style="font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 5px;">📅 取引年月日</div>
+                    <div style="font-size: 15px; font-weight: 700; color: #2c3e50;">2025年10月15日</div>
+                </div>
+
+                <!-- 請求明細 -->
+                <div class="invoice-items">
+                    <div style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 15px;">請求明細</div>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%;">品目・サービス内容</th>
+                                <th class="text-center" style="width: 10%;">数量</th>
+                                <th class="text-right" style="width: 20%;">単価（円）</th>
+                                <th class="text-right" style="width: 20%;">金額（円）</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="font-weight: 600;">CLAUDE SUITE 月額利用料</div>
+                                    <div style="font-size: 12px; color: #7f8c8d;">2025年11月分（スタンダードプラン）</div>
+                                </td>
+                                <td class="text-center">1</td>
+                                <td class="text-right">100,000</td>
+                                <td class="text-right" style="font-weight: 600;">100,000</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="font-weight: 600;">AI自動応答オプション</div>
+                                    <div style="font-size: 12px; color: #7f8c8d;">Claude API連携機能</div>
+                                </td>
+                                <td class="text-center">1</td>
+                                <td class="text-right">30,000</td>
+                                <td class="text-right" style="font-weight: 600;">30,000</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="font-weight: 600;">追加ユーザーライセンス</div>
+                                    <div style="font-size: 12px; color: #7f8c8d;">5ユーザー × 3,000円</div>
+                                </td>
+                                <td class="text-center">5</td>
+                                <td class="text-right">3,000</td>
+                                <td class="text-right" style="font-weight: 600;">15,000</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="font-weight: 600;">導入支援サポート</div>
+                                    <div style="font-size: 12px; color: #7f8c8d;">初期設定・トレーニング</div>
+                                </td>
+                                <td class="text-center">1</td>
+                                <td class="text-right">5,000</td>
+                                <td class="text-right" style="font-weight: 600;">5,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 税率区分と消費税 -->
+                <div class="tax-breakdown">
+                    <div class="tax-title">📊 税率区分別 内訳</div>
+                    <div class="tax-row">
+                        <span>10%対象（標準税率）</span>
+                        <span style="font-weight: 600;">¥150,000</span>
+                    </div>
+                    <div class="tax-row" style="color: #7f8c8d;">
+                        <span>8%対象（軽減税率）</span>
+                        <span>¥0</span>
+                    </div>
+                </div>
+
+                <!-- 合計金額 -->
+                <div class="invoice-summary">
+                    <div class="summary-box">
+                        <div class="summary-row">
+                            <span>小計（税抜）</span>
+                            <span>¥150,000</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>消費税（10%）</span>
+                            <span>¥15,000</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>合計金額（税込）</span>
+                            <span>¥165,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 備考・振込先 -->
+                <div class="invoice-notes">
+                    <div class="notes-title">お支払い方法・振込先</div>
+                    <div class="notes-content">
+                        <p style="margin-bottom: 10px;">下記口座へお振込みください。振込手数料は貴社にてご負担いただけますようお願いいたします。</p>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 3px; margin-bottom: 15px;">
+                            <div><strong>銀行名:</strong> ○○銀行 渋谷支店</div>
+                            <div><strong>口座種別:</strong> 普通</div>
+                            <div><strong>口座番号:</strong> 1234567</div>
+                            <div><strong>口座名義:</strong> ゴウドウガイシャUMA</div>
+                        </div>
+                        <p style="font-size: 12px; color: #7f8c8d;">※この請求書は適格請求書発行事業者の要件に基づき発行しております。</p>
+                        <p style="font-size: 12px; color: #7f8c8d;">※ご不明な点がございましたら、上記連絡先までお問い合わせください。</p>
+                    </div>
+                </div>
+
+                <!-- フッター -->
+                <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid #e1e8ed; font-size: 11px; color: #95a5a6;">
+                    <div>CLAUDE SUITE - クラウド型顧客管理AIシステム</div>
+                    <div>合同会社UMA | https://claude-suite-demo.vercel.app</div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
