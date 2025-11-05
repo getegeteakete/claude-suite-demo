@@ -1,20 +1,48 @@
 {
-  "name": "claude-suite-demo",
+  "name": "claude-suite",
   "version": "1.0.0",
-  "description": "CLAUDE SUITE - クラウド型顧客管理AIシステム デモサイト",
+  "description": "CLAUDE SUITE - クラウド型顧客管理AIシステム",
   "scripts": {
-    "dev": "npx http-server -p 8000",
-    "start": "npx http-server -p 8000"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "demo": "npx http-server -p 8000"
+  },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "next-auth": "^4.24.0",
+    "@vercel/postgres": "^0.9.0",
+    "@auth/pg-adapter": "^1.0.0",
+    "bcryptjs": "^2.4.3",
+    "zod": "^3.22.0",
+    "date-fns": "^3.0.0",
+    "react-hook-form": "^7.51.0",
+    "lucide-react": "^0.344.0",
+    "clsx": "^2.1.0",
+    "tailwindcss": "^3.4.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/bcryptjs": "^2.4.6",
+    "typescript": "^5.3.0",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.2.0"
   },
   "keywords": [
     "claude",
     "ai",
     "crm",
-    "demo",
+    "nextjs",
     "it-subsidy"
   ],
   "author": "合同会社UMA",
   "license": "UNLICENSED",
   "private": true
 }
-
