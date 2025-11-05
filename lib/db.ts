@@ -128,6 +128,122 @@ export async function deleteCustomer(id: number, userId: number) {
   }
 }
 
+// 商談管理用の関数
+export async function getDeals(userId: number) {
+  try {
+    const result = await sql<Deal>`
+      SELECT d.*, c.company_name as customer_name
+      FROM deals d
+      LEFT JOIN customers c ON d.customer_id = c.id
+      WHERE d.user_id = ${userId}
+      ORDER BY d.created_at DESC
+    `
+    return result.rows
+  } catch (error) {
+    console.error('Database error:', error)
+    throw new Error('商談データの取得に失敗しました')
+  }
+}
+
+export async function createDeal(data: Partial<Deal>) {
+  try {
+    const result = await sql<Deal>`
+      INSERT INTO deals (
+        customer_id, title, amount, stage, probability,
+        expected_close_date, status, user_id
+      )
+      VALUES (
+        ${data.customer_id}, ${data.title}, ${data.amount},
+        ${data.stage || 'prospecting'}, ${data.probability || 30},
+        ${data.expected_close_date}, ${data.status || 'active'}, ${data.user_id}
+      )
+      RETURNING *
+    `
+    return result.rows[0]
+  } catch (error) {
+    console.error('Database error:', error)
+    throw new Error('商談の作成に失敗しました')
+  }
+}
+
+export async function updateDeal(id: number, data: Partial<Deal>) {
+  try {
+    const result = await sql<Deal>`
+      UPDATE deals 
+      SET 
+        title = COALESCE(${data.title}, title),
+        amount = COALESCE(${data.amount}, amount),
+        stage = COALESCE(${data.stage}, stage),
+        probability = COALESCE(${data.probability}, probability),
+        expected_close_date = COALESCE(${data.expected_close_date}, expected_close_date),
+        status = COALESCE(${data.status}, status),
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${id}
+      RETURNING *
+    `
+    return result.rows[0]
+  } catch (error) {
+    console.error('Database error:', error)
+    throw new Error('商談の更新に失敗しました')
+  }
+}
+
+// 請求書管理用の関数
+export async function getInvoices(userId: number) {
+  try {
+    const result = await sql<Invoice>`
+      SELECT i.*, c.company_name as customer_name
+      FROM invoices i
+      LEFT JOIN customers c ON i.customer_id = c.id
+      WHERE i.user_id = ${userId}
+      ORDER BY i.created_at DESC
+    `
+    return result.rows
+  } catch (error) {
+    console.error('Database error:', error)
+    throw new Error('請求書データの取得に失敗しました')
+  }
+}
+
+export async function createInvoice(data: Partial<Invoice>) {
+  try {
+    const result = await sql<Invoice>`
+      INSERT INTO invoices (
+        invoice_number, customer_id, issue_date, due_date,
+        total_amount, paid_amount, status, user_id
+      )
+      VALUES (
+        ${data.invoice_number}, ${data.customer_id}, ${data.issue_date},
+        ${data.due_date}, ${data.total_amount}, ${data.paid_amount || 0},
+        ${data.status || 'pending'}, ${data.user_id}
+      )
+      RETURNING *
+    `
+    return result.rows[0]
+  } catch (error) {
+    console.error('Database error:', error)
+    throw new Error('請求書の作成に失敗しました')
+  }
+}
+
+export async function updateInvoice(id: number, data: Partial<Invoice>) {
+  try {
+    const result = await sql<Invoice>`
+      UPDATE invoices 
+      SET 
+        paid_amount = COALESCE(${data.paid_amount}, paid_amount),
+        status = COALESCE(${data.status}, status),
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${id}
+      RETURNING *
+    `
+    return result.rows[0]
+  } catch (error) {
+    console.error('Database error:', error)
+    throw new Error('請求書の更新に失敗しました')
+  }
+}
+
 // ダッシュボード統計用
 export async function getDashboardStats(userId: number) {
   try {
